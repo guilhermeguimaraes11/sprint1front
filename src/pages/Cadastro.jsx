@@ -15,9 +15,10 @@ function Cadastro() {
   const [usuario, setUsuario] = useState({
     nome: "",
     email: "",
-    NIF: "",
     senha: "",
   });
+
+  const [loading, setLoading] = useState(false); // Adicionando estado de loading
 
   const onChange = (event) => {
     const { name, value } = event.target;
@@ -32,16 +33,17 @@ function Cadastro() {
   const navigate = useNavigate();
 
   async function Cadastro() {
-    await api.postCadastro(usuario).then(
-      (response) => {
-        alert(response.data.message);
-        navigate("/principal");
-      },
-      (error) => {
-        console.log(error);
-        alert(error.response.data.error);
-      }
-    );
+    setLoading(true); // Ativar loading ao iniciar a requisição
+    try {
+      const response = await api.postCadastro(usuario);
+      alert(response.data.message);
+      navigate("/principal");
+    } catch (error) {
+      console.log(error);
+      alert(error.response?.data?.error || "Ocorreu um erro inesperado");
+    } finally {
+      setLoading(false); // Desativar loading após a requisição
+    }
   }
 
   return (
@@ -94,17 +96,6 @@ function Cadastro() {
         <TextField
           required
           fullWidth
-          id="NIF"
-          placeholder="  NIF"
-          name="NIF"
-          margin="normal"
-          value={usuario.NIF}
-          onChange={onChange}
-          sx={styles.textField}
-        />
-        <TextField
-          required
-          fullWidth
           id="senha"
           placeholder="  senha"
           name="senha"
@@ -114,8 +105,13 @@ function Cadastro() {
           onChange={onChange}
           sx={styles.textField}
         />
-        <Button type="submit" variant="contained" sx={styles.buttonCadastro}>
-          Cadastrar-se
+        <Button
+          type="submit"
+          variant="contained"
+          sx={styles.buttonCadastro}
+          disabled={loading} // Desabilitar o botão durante o carregamento
+        >
+          {loading ? "Cadastrando..." : "Cadastrar-se"} {/* Mostrar texto de carregamento */}
         </Button>
         <Button
           component={Link}
