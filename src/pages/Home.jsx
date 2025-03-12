@@ -1,131 +1,103 @@
+import React from "react";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import home from "../../img/iconehome.png";
 import logo from "../../img/logo.png";
 
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-
-function Home() {
+const HomePage = () => {
   const styles = getStyles();
 
   return (
-    <Container sx={styles.container}>
+    <Container component="main" sx={styles.container}>
       <Box sx={styles.header}>
-        <img src={logo} alt="Logo" style={styles.logo} />
-        <Box sx={styles.buttonsContainer}>
-          <Button
-            component={Link}
-            to="/cadastro"
-            sx={styles.buttonToCadastro}
-            variant="contained"
-          >
-            Cadastre-se
-          </Button>
-          <Button
-            component={Link}
-            to="/login"
-            sx={styles.buttonToLogin}
-            variant="contained"
-          >
-            Login
-          </Button>
-        </Box>
+        <Button component={Link} to="/home" sx={styles.buttonHome}>
+          <img
+            src={home}
+            alt="Home"
+            style={{ width: "65px", height: "65px" }}
+          />
+        </Button>
       </Box>
-      <Box sx={styles.body}>
-        <Typography sx={styles.bodyText}>
-          Bem-vindo ao site de Reservas do SENAI
+      <Box sx={styles.content}>
+        <Box component="img" src={logo} alt="Logo" sx={styles.logo} />
+        <Typography variant="h4" sx={styles.title}>
+          Bem-vindo ao Sistema SENAI
         </Typography>
+        <Button component={Link} to="/login" sx={styles.button} variant="contained">
+          Login
+        </Button>
+        <Button component={Link} to="/cadastro" sx={styles.button} variant="outlined">
+          Cadastre-se
+        </Button>
       </Box>
       <Box sx={styles.footer}>
         <Typography sx={styles.footerText}>
-          &copy; Desenvolvido por: Leonardo Pedroso, Hyago e Guilherme
+          &copy; Desenvolvido por: João Pedro Vidal, Gabriela de Melo, Leonardo Pedroso
         </Typography>
       </Box>
     </Container>
   );
-}
+};
 
 function getStyles() {
   return {
     container: {
-      backgroundImage: `url(../../img/fundoinicial.png)`,
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundRepeat: "no-repeat",
-      height: "100vh",
-      minWidth: "100%",
+      backgroundColor: "#ffdcdc",
+      minHeight: "100vh",
       display: "flex",
       flexDirection: "column",
-      justifyContent: "center",
       alignItems: "center",
-      color: "#fff",
     },
     header: {
+      backgroundColor: "rgba(177, 16, 16, 1)",
+      width: "100%",
+      height: "10vh",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "end",
+      borderBottom: "5px solid white",
+      paddingRight: "20px",
+    },
+    buttonHome: {
+      mr: 2,
+      backgroundColor: "#A80805"
+    },
+    content: {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      marginBottom: "20px",
+      justifyContent: "center",
+      textAlign: "center",
+      mt: 8,
     },
     logo: {
       width: "250px",
       height: "auto",
-      borderRadius: "10px",
-      marginBottom: "40px",
+      mb: 4,
     },
-    buttonsContainer: {
-      display: "flex",
-      gap: "20px",
+    title: {
+      fontWeight: "bold",
+      mb: 3,
     },
-    buttonToCadastro: {
-      backgroundColor: "#2c3e50",
-      color: "#fff",
-      borderRadius: "30px",
-      width: "150px",
-      height: "45px",
-      fontSize: "16px",
-      "&:hover": {
-        backgroundColor: "#34495e",
-      },
-    },
-    buttonToLogin: {
-      backgroundColor: "#e74c3c",
-      color: "#fff",
-      borderRadius: "30px",
-      width: "150px",
-      height: "45px",
-      fontSize: "16px",
-      "&:hover": {
-        backgroundColor: "#c0392b",
-      },
-    },
-    body: {
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      height: "30vh",
-      textAlign: "center",
-    },
-    bodyText: {
-      fontSize: "35px",
-      fontWeight: "700",
-      letterSpacing: "2px",
-      lineHeight: "1.2",
+    button: {
+      mt: 2,
+      width: "200px",
     },
     footer: {
-      position: "absolute",
-      bottom: "10px",
+      mt: "auto",
+      backgroundColor: "rgba(177, 16, 16, 1)",
       width: "100%",
+      height: "7vh",
       display: "flex",
+      alignItems: "center",
       justifyContent: "center",
-      padding: "10px",
-      backgroundColor: "rgba(0, 0, 0, 0.7)",
+      borderTop: "5px solid white",
     },
     footerText: {
-      fontSize: "14px",
-      color: "#fff",
+      color: "white",
+      fontSize: 16,
     },
   };
 }
 
-export default Home;
+export default HomePage;
