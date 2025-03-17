@@ -8,7 +8,12 @@ import api from "../services/axios";
 const Cadastro = () => {
   const styles = getStyles();
   const navigate = useNavigate();
-  const [usuario, setUsuario] = useState({ nome: "", email: "", NIF: "", senha: "" });
+  const [usuario, setUsuario] = useState({
+    nome: "",
+    email: "",
+    cpf: "",
+    senha: "",
+  });
 
   const onChange = (event) => {
     const { name, value } = event.target;
@@ -28,27 +33,91 @@ const Cadastro = () => {
   };
 
   return (
-    <Container component="main" sx={styles.container}>
+    <div>
       <Box sx={styles.header}>
         <Button component={Link} to="/home" sx={styles.buttonHome}>
-          <img src={home} alt="Home" style={{ width: "65px", height: "65px" }} />
+          <img
+            src={home}
+            alt="Home"
+            style={{ width: "65px", height: "65px" }}
+          />
         </Button>
       </Box>
-      <Box component="form" sx={styles.form} onSubmit={handleSubmit} noValidate>
-        <Box component="img" src={logo} alt="Logo" sx={styles.logo} />
-        <TextField required fullWidth id="nome" placeholder="Nome" name="nome" margin="normal" value={usuario.nome} onChange={onChange} sx={styles.textField} />
-        <TextField required fullWidth id="email" placeholder="E-mail" name="email" margin="normal" value={usuario.email} onChange={onChange} sx={styles.textField} />
-        <TextField required fullWidth id="NIF" placeholder="NIF" name="NIF" margin="normal" value={usuario.NIF} onChange={onChange} sx={styles.textField} />
-        <TextField required fullWidth id="senha" placeholder="Senha" name="senha" type="password" margin="normal" value={usuario.senha} onChange={onChange} sx={styles.textField} />
-        <Button type="submit" variant="contained" sx={styles.buttonCadastro}>Cadastrar-se</Button>
-        <Button component={Link} to="/login" variant="text" sx={styles.buttonToLogin}>Login</Button>
-      </Box>
+
+      <Container component="main" sx={styles.container}>
+        <Box
+          component="form"
+          sx={styles.form}
+          onSubmit={handleSubmit}
+          noValidate
+        >
+          <Box component="img" src={logo} alt="Logo" sx={styles.logo} />
+          <TextField
+            required
+            fullWidth
+            id="nome"
+            placeholder="Nome"
+            name="nome"
+            margin="normal"
+            value={usuario.nome}
+            onChange={onChange}
+            sx={styles.textField}
+          />
+          <TextField
+            required
+            fullWidth
+            id="email"
+            placeholder="E-mail"
+            name="email"
+            margin="normal"
+            value={usuario.email}
+            onChange={onChange}
+            sx={styles.textField}
+          />
+          <TextField
+            required
+            fullWidth
+            id="cpf"
+            placeholder="CPF"
+            name="cpf"
+            margin="normal"
+            value={usuario.cpf}
+            onChange={onChange}
+            sx={styles.textField}
+          />
+          <TextField
+            required
+            fullWidth
+            id="senha"
+            placeholder="Senha"
+            name="senha"
+            type="password"
+            margin="normal"
+            value={usuario.senha}
+            onChange={onChange}
+            sx={styles.textField}
+          />
+          <Button type="submit" variant="contained" sx={styles.buttonCadastro}>
+            Cadastrar-se
+          </Button>
+          <Button
+            component={Link}
+            to="/login"
+            variant="text"
+            sx={styles.buttonToLogin}
+          >
+            Login
+          </Button>
+        </Box>
+      </Container>
+
       <Box sx={styles.footer}>
-        <Typography sx={styles.footerText}>
-          &copy; Desenvolvido por: João Pedro Vidal, Gabriela de Melo, Leonardo Pedroso
-        </Typography>
-      </Box>
-    </Container>
+          <Typography sx={styles.footerText}>
+            &copy; Desenvolvido por: Leonardo Pedroso, Guilherme Guimarães e
+            Hyago
+          </Typography>
+        </Box>
+    </div>
   );
 };
 
@@ -60,16 +129,16 @@ function getStyles() {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
+      height: "50vh"
     },
     header: {
-      backgroundColor: "#D90000",
+      backgroundColor: "rgba(177, 16, 16, 1)",
       width: "100%",
       height: "10vh",
       display: "flex",
       alignItems: "center",
       justifyContent: "end",
       borderBottom: "5px solid white",
-      paddingRight: "20px",
     },
     buttonHome: { mr: 2 },
     form: {
@@ -117,15 +186,18 @@ function getStyles() {
     },
     footer: {
       mt: "auto",
-      backgroundColor: "#D90000",
+      backgroundColor: "rgba(177, 16, 16, 1)",
       width: "100%",
-      height: "7vh",
+      height: "10vh",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
       borderTop: "5px solid white",
     },
-    footerText: { color: "white", fontSize: 16 },
+    footerText: {
+      color: "white",
+      fontSize: 16,
+    },
   };
 }
 

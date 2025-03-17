@@ -8,7 +8,7 @@ const HomePage = () => {
   const styles = getStyles();
 
   return (
-    <Container component="main" sx={styles.container}>
+    <div style={{ backgroundColor: "#FFDCDC"}} >
       <Box sx={styles.header}>
         <Button component={Link} to="/home" sx={styles.buttonHome}>
           <img
@@ -18,35 +18,53 @@ const HomePage = () => {
           />
         </Button>
       </Box>
-      <Box sx={styles.content}>
-        <Box component="img" src={logo} alt="Logo" sx={styles.logo} />
-        <Typography variant="h4" sx={styles.title}>
-          Bem-vindo ao Sistema SENAI
-        </Typography>
-        <Button component={Link} to="/login" sx={styles.button} variant="contained">
-          Login
-        </Button>
-        <Button component={Link} to="/cadastro" sx={styles.button} variant="outlined">
-          Cadastre-se
-        </Button>
-      </Box>
+
+      <Container component="main" sx={styles.container}>
+        <Box sx={styles.content}>
+          <Box component="img" src={logo} alt="Logo" sx={styles.logo} />
+          <Typography variant="h4" sx={styles.title}>
+            Bem-vindo ao Sistema SENAI
+          </Typography>
+          <Button
+            component={Link}
+            to="/login"
+            sx={styles.button}
+            variant="contained"
+          >
+            Login
+          </Button>
+          <Button
+            component={Link}
+            to="/cadastro"
+            sx={styles.button}
+            variant="outlined"
+          >
+            Cadastre-se
+          </Button>
+        </Box>
+        
+      </Container>
+
       <Box sx={styles.footer}>
-        <Typography sx={styles.footerText}>
-          &copy; Desenvolvido por: João Pedro Vidal, Gabriela de Melo, Leonardo Pedroso
-        </Typography>
-      </Box>
-    </Container>
+          <Typography sx={styles.footerText}>
+            &copy; Desenvolvido por: Leonardo Pedroso, Guilherme Guimarães e
+            Hyago
+          </Typography>
+        </Box>
+
+    </div>
   );
 };
 
 function getStyles() {
   return {
     container: {
-      backgroundColor: "#ffdcdc",
-      minHeight: "100vh",
+      backgroundColor: "#FFDCDC",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
+      height: "78.6vh",
+     
     },
     header: {
       backgroundColor: "rgba(177, 16, 16, 1)",
@@ -56,11 +74,10 @@ function getStyles() {
       alignItems: "center",
       justifyContent: "end",
       borderBottom: "5px solid white",
-      paddingRight: "20px",
     },
     buttonHome: {
       mr: 2,
-      backgroundColor: "#A80805"
+      backgroundColor: "#A80805",
     },
     content: {
       display: "flex",
@@ -82,12 +99,14 @@ function getStyles() {
     button: {
       mt: 2,
       width: "200px",
+      backgroundColor: "rgba(177, 16, 16, 1)",
+      color: "white",
     },
     footer: {
       mt: "auto",
       backgroundColor: "rgba(177, 16, 16, 1)",
       width: "100%",
-      height: "7vh",
+      height: "10vh",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
