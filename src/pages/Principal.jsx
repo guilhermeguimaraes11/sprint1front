@@ -99,7 +99,8 @@ function Principal() {
       </Box>
       <Box sx={styles.footer}>
         <Typography sx={styles.footerText}>
-          &copy; Desenvolvido por: Vinicius Fogaça, Maria Júlia e Maria Fernanda
+          &copy; Desenvolvido por: Leonardo Pedroso, Guilherme Guimarães e
+            Hyago
         </Typography>
       </Box>
     </Container>
@@ -109,7 +110,7 @@ function Principal() {
 function getStyles() {
   return {
     container: {
-      backgroundImage: `url(../../img/fundo.png)`,
+      backgroundColor: "#FFDCDC",
       backgroundSize: "cover",
       backgroundPosition: "center",
       backgroundRepeat: "no-repeat",

@@ -76,7 +76,7 @@ function getStyles() {
       borderBottom: "5px solid white",
     },
     buttonHome: {
-      mr: 2,    
+      mr: 2,
     },
     content: {
       display: "flex",

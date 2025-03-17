@@ -28,7 +28,7 @@ const Cadastro = () => {
       navigate("/principal");
     } catch (error) {
       console.log(error);
-      alert(error.response?.data?.error || "Erro ao cadastrar");
+      alert(error.response.data.error);
     }
   };
 
@@ -57,7 +57,7 @@ const Cadastro = () => {
             fullWidth
             id="nome"
             placeholder="Nome"
-            name="nome"
+            name="nomecompleto"
             margin="normal"
             value={usuario.nomecompleto}
             onChange={onChange}
