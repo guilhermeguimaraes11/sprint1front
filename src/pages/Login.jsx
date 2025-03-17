@@ -63,11 +63,10 @@ function getStyles() {
   return {
     container: {
       backgroundColor: "#ffdcdc",
-      minHeight: "100vh",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      height: "78.6vh"
+      height: "67.7vh"
     },
     header: {
       backgroundColor: "#D90000",
@@ -80,7 +79,7 @@ function getStyles() {
     },
     buttonHome: { mr: 2 },
     form: {
-      mt: 0,
+      mt: 5,
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
@@ -124,7 +123,7 @@ function getStyles() {
       "&:hover": { color: "rgb(167, 63, 63)" },
     },
     footer: {
-      mt: "auto",
+      mt: 10,
       backgroundColor: "#D90000",
       width: "100%",
       height: "10vh",
