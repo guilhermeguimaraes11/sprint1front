@@ -9,7 +9,7 @@ const Cadastro = () => {
   const styles = getStyles();
   const navigate = useNavigate();
   const [usuario, setUsuario] = useState({
-    nome: "",
+    nomecompleto: "",
     email: "",
     cpf: "",
     senha: "",
@@ -59,7 +59,7 @@ const Cadastro = () => {
             placeholder="Nome"
             name="nome"
             margin="normal"
-            value={usuario.nome}
+            value={usuario.nomecompleto}
             onChange={onChange}
             sx={styles.textField}
           />
