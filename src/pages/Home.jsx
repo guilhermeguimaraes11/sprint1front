@@ -67,7 +67,7 @@ function getStyles() {
      
     },
     header: {
-      backgroundColor: "rgba(177, 16, 16, 1)",
+      backgroundColor: "#D90000",
       width: "100%",
       height: "10vh",
       display: "flex",
@@ -104,7 +104,7 @@ function getStyles() {
     },
     footer: {
       mt: "auto",
-      backgroundColor: "rgba(177, 16, 16, 1)",
+      backgroundColor: "#D90000",
       width: "100%",
       height: "10vh",
       display: "flex",

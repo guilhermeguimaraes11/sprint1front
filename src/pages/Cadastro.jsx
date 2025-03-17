@@ -33,7 +33,7 @@ const Cadastro = () => {
   };
 
   return (
-    <div>
+    <div style={{ backgroundColor: "#FFDCDC"}} >
       <Box sx={styles.header}>
         <Button component={Link} to="/home" sx={styles.buttonHome}>
           <img
@@ -124,15 +124,14 @@ const Cadastro = () => {
 function getStyles() {
   return {
     container: {
-      backgroundColor: "#ffdcdc",
-      minHeight: "100vh",
+      backgroundColor: "#FFDCDC",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      height: "50vh"
+      height: "78.6vh",
     },
     header: {
-      backgroundColor: "rgba(177, 16, 16, 1)",
+      backgroundColor: "#D90000",
       width: "100%",
       height: "10vh",
       display: "flex",
@@ -142,13 +141,14 @@ function getStyles() {
     },
     buttonHome: { mr: 2 },
     form: {
-      mt: 8,
+      mt: 0,
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
       backgroundColor: "#FD7C7C",
       padding: "20px",
       borderRadius: 10,
+      width: "40%",
     },
     logo: { width: "250px", height: "auto", mb: 4 },
     textField: {
@@ -186,7 +186,7 @@ function getStyles() {
     },
     footer: {
       mt: "auto",
-      backgroundColor: "rgba(177, 16, 16, 1)",
+      backgroundColor: "#D90000",
       width: "100%",
       height: "10vh",
       display: "flex",

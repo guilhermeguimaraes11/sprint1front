@@ -28,12 +28,16 @@ const Login = () => {
   };
 
   return (
-    <Container component="main" sx={styles.container}>
-      <Box sx={styles.header}>
+    <div style={{ backgroundColor: "#FFDCDC"}} >
+    
+    <Box sx={styles.header}>
         <Button component={Link} to="/home" sx={styles.buttonHome}>
           <img src={home} alt="Home" style={{ width: "65px", height: "65px" }} />
         </Button>
       </Box>
+
+    <Container component="main" sx={styles.container}>
+      
       <Box component="form" sx={styles.form} onSubmit={handleSubmit} noValidate>
         <Box component="img" src={logo} alt="Logo" sx={styles.logo} />
         <TextField required fullWidth id="email" placeholder="E-mail" name="email" margin="normal" value={usuario.email} onChange={onChange} sx={styles.textField} />
@@ -41,12 +45,17 @@ const Login = () => {
         <Button type="submit" variant="contained" sx={styles.buttonLogin}>Login</Button>
         <Button component={Link} to="/cadastro" variant="text" sx={styles.buttonCadastro}>Cadastre-se</Button>
       </Box>
-      <Box sx={styles.footer}>
-        <Typography sx={styles.footerText}>
-          &copy; Desenvolvido por: João Pedro Vidal, Gabriela de Melo, Leonardo Pedroso
-        </Typography>
-      </Box>
+      
     </Container>
+
+    <Box sx={styles.footer}>
+        <Typography sx={styles.footerText}>
+          &copy; Desenvolvido por: Leonardo Pedroso, Guilherme Guimarães e
+            Hyago
+        </Typography>
+      </Box> 
+
+    </div>
   );
 };
 
@@ -58,6 +67,7 @@ function getStyles() {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
+      height: "78.6vh"
     },
     header: {
       backgroundColor: "#D90000",
@@ -67,17 +77,17 @@ function getStyles() {
       alignItems: "center",
       justifyContent: "end",
       borderBottom: "5px solid white",
-      paddingRight: "20px",
     },
     buttonHome: { mr: 2 },
     form: {
-      mt: 8,
+      mt: 0,
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
       backgroundColor: "#FD7C7C",
-      padding: "20px",
+      padding: "30px",
       borderRadius: 10,
+      width: "40%",
     },
     logo: { width: "250px", height: "auto", mb: 4 },
     textField: {
@@ -117,7 +127,7 @@ function getStyles() {
       mt: "auto",
       backgroundColor: "#D90000",
       width: "100%",
-      height: "7vh",
+      height: "10vh",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
