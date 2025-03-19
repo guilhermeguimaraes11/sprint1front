@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Box, Button, Container, TextField } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import home from "../../img/iconehome.png";
-import logo from "../../img/logo.png";
-import api from "../services/axios";
+import logo from "../assets/logo.png";
+import api from "../axios/axios";
 import Footer from '../components/Footer';
 import Header from "../components/Header";
 

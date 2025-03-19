@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import logout from "../../img/iconelogout.png";
-import logo from "../../img/logo.png";
-import api from "../services/axios";
+import logout from "../assets/iconelogout.png";
+import logo from "../assets/logo.png";
+import api from "../axios/axios";
 import Footer from '../components/Footer';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -117,8 +117,8 @@ function getStyles() {
       flexDirection: "column",
     },
     header: {
-      backgroundColor: "rgba(177, 16, 16, 1)",
-      width: "210vh",
+      backgroundColor: "#D90000",
+      width: "230vh",
       height: "11vh",
       display: "flex",
       alignItems: "center",
@@ -139,7 +139,7 @@ function getStyles() {
       backgroundColor: "transparent",
     },
     table: {
-      backgroundColor: "#949494",
+      backgroundColor: "#FF7B7B",
       marginTop:2.5,
       marginBottom:2.5,
       marginLeft: "auto", // Para centralizar
@@ -148,14 +148,14 @@ function getStyles() {
       borderRadius: "15px", // Bordas arredondadas
     },
     tableHead: {
-      backgroundColor: "gray",
+      backgroundColor: "#FF7B7B",
       borderRadius: "50px",
       border: "2px solid white",
     },
     boxFundoTabela: {
       border: "5px solid white",
       borderRadius: "15px",
-      backgroundColor: "#B5B5B5",
+      backgroundColor: "#FFC2C2",
       width: "90%",
     },
     tableCell: {
@@ -172,10 +172,10 @@ function getStyles() {
       borderRadius: 10,
     },
     tableBodyCell: {
-      backgroundColor: "#949494",
+      backgroundColor: "#FF7B7B",
       border: "1px solid white",
       borderRadius: 10,
-      color: "white",
+      color: "black",
       fontSize: 20,
       paddingTop: 1.2,
       paddingBottom: 1.2,
