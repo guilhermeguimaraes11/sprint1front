@@ -3,6 +3,7 @@ import { Box, Button, Container, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import home from "../../img/iconehome.png";
 import logo from "../../img/logo.png";
+import Footer from '../components/Footer';
 
 const HomePage = () => {
   const styles = getStyles();
@@ -45,12 +46,7 @@ const HomePage = () => {
         
       </Container>
 
-      <Box sx={styles.footer}>
-          <Typography sx={styles.footerText}>
-            &copy; Desenvolvido por: Leonardo Pedroso, Guilherme Guimarães e
-            Hyago
-          </Typography>
-        </Box>
+      <Footer />
 
     </div>
   );

@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import home from "../../img/iconehome.png";
 import logo from "../../img/logo.png";
 import api from "../services/axios";
+import Footer from '../components/Footer';
 
 const Login = () => {
   const styles = getStyles();
@@ -48,12 +49,7 @@ const Login = () => {
       
     </Container>
 
-    <Box sx={styles.footer}>
-        <Typography sx={styles.footerText}>
-          &copy; Desenvolvido por: Leonardo Pedroso, Guilherme Guimarães e
-            Hyago
-        </Typography>
-      </Box> 
+    <Footer />
 
     </div>
   );
@@ -66,7 +62,7 @@ function getStyles() {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      height: "67.7vh"
+      height: "78.3vh"
     },
     header: {
       backgroundColor: "#D90000",
@@ -79,14 +75,15 @@ function getStyles() {
     },
     buttonHome: { mr: 2 },
     form: {
-      mt: 5,
+      mt: 3,
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
       backgroundColor: "#FD7C7C",
       padding: "30px",
       borderRadius: 10,
-      width: "40%",
+      width: "33%",
+      height: "140%"
     },
     logo: { width: "250px", height: "auto", mb: 4 },
     textField: {
@@ -121,16 +118,6 @@ function getStyles() {
       textDecoration: "underline",
       textUnderlineOffset: "4px",
       "&:hover": { color: "rgb(167, 63, 63)" },
-    },
-    footer: {
-      mt: 10,
-      backgroundColor: "#D90000",
-      width: "100%",
-      height: "10vh",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      borderTop: "5px solid white",
     },
     footerText: { color: "white", fontSize: 16 },
   };

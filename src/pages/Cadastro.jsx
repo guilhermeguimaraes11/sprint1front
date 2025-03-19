@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import home from "../../img/iconehome.png";
 import logo from "../../img/logo.png";
 import api from "../services/axios";
+import Footer from '../components/Footer';
 
 const Cadastro = () => {
   const styles = getStyles();
@@ -111,12 +112,7 @@ const Cadastro = () => {
         </Box>
       </Container>
 
-      <Box sx={styles.footer}>
-          <Typography sx={styles.footerText}>
-            &copy; Desenvolvido por: Leonardo Pedroso, Guilherme Guimarães e
-            Hyago
-          </Typography>
-        </Box>
+      <Footer />
     </div>
   );
 };
@@ -146,8 +142,7 @@ function getStyles() {
       flexDirection: "column",
       alignItems: "center",
       backgroundColor: "#FD7C7C",
-      padding: "0px",
-      borderRadius: 10,
+      borderRadius: "10px",
       width: "33%",
       height:"110%"
     },
@@ -185,16 +180,6 @@ function getStyles() {
       textDecoration: "underline",
       textUnderlineOffset: "4px",
       "&:hover": { color: "rgb(167, 63, 63)" },
-    },
-    footer: {
-      mt: "auto",
-      backgroundColor: "#D90000",
-      width: "100%",
-      height: "10vh",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      borderTop: "5px solid white",
     },
     footerText: {
       color: "white",

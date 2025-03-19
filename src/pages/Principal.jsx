@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import logout from "../../img/iconelogout.png";
 import logo from "../../img/logo.png";
 import api from "../services/axios";
-
+import Footer from '../components/Footer';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -14,8 +14,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Typography from "@mui/material/Typography";
-import { Padding } from "@mui/icons-material";
+
 
 function Principal() {
   const styles = getStyles();
@@ -97,12 +96,9 @@ function Principal() {
           </Table>
         </TableContainer>
       </Box>
-      <Box sx={styles.footer}>
-        <Typography sx={styles.footerText}>
-          &copy; Desenvolvido por: Leonardo Pedroso, Guilherme Guimarães e
-            Hyago
-        </Typography>
-      </Box>
+      <Footer />
+      
+      
     </Container>
   );
 }
