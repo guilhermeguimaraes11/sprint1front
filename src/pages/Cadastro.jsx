@@ -146,13 +146,15 @@ function getStyles() {
       flexDirection: "column",
       alignItems: "center",
       backgroundColor: "#FD7C7C",
-      padding: "20px",
+      padding: "0px",
       borderRadius: 10,
-      width: "40%",
+      width: "33%",
+      height:"110%"
     },
-    logo: { width: "250px", height: "auto", mb: 4 },
+    logo: { width: "220px", height: "auto", mb: 1, margin: "10px"},
     textField: {
-      width: "35vh",
+      width: "50vh",
+      height: 50,
       backgroundColor: "white",
       borderRadius: 10,
       "& .MuiOutlinedInput-root": {
@@ -163,11 +165,11 @@ function getStyles() {
       "& input::placeholder": { fontSize: "17px", color: "black" },
     },
     buttonCadastro: {
-      mt: 3,
+      mt: 1,
       color: "white",
       backgroundColor: "#A80805",
       width: 135,
-      height: 45,
+      height: 40,
       fontWeight: 600,
       fontSize: 15,
       borderRadius: 15,
@@ -175,7 +177,7 @@ function getStyles() {
       "&:hover": { backgroundColor: "rgba(255, 0, 0, 0.55)" },
     },
     buttonToLogin: {
-      mt: 2,
+      mt: 1 ,
       color: "#A80805",
       backgroundColor: "transparent",
       fontWeight: "bold",
