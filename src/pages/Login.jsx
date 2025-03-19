@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, TextField } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import home from "../../img/iconehome.png";
 import logo from "../../img/logo.png";
 import api from "../services/axios";
 import Footer from '../components/Footer';
+import Header from '../components/Header';
+
 
 const Login = () => {
   const styles = getStyles();
@@ -31,11 +32,9 @@ const Login = () => {
   return (
     <div style={{ backgroundColor: "#FFDCDC"}} >
     
-    <Box sx={styles.header}>
-        <Button component={Link} to="/home" sx={styles.buttonHome}>
-          <img src={home} alt="Home" style={{ width: "65px", height: "65px" }} />
-        </Button>
-      </Box>
+    
+
+    <Header />
 
     <Container component="main" sx={styles.container}>
       
@@ -63,15 +62,6 @@ function getStyles() {
       flexDirection: "column",
       alignItems: "center",
       height: "78.3vh"
-    },
-    header: {
-      backgroundColor: "#D90000",
-      width: "100%",
-      height: "10vh",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "end",
-      borderBottom: "5px solid white",
     },
     buttonHome: { mr: 2 },
     form: {
@@ -118,8 +108,7 @@ function getStyles() {
       textDecoration: "underline",
       textUnderlineOffset: "4px",
       "&:hover": { color: "rgb(167, 63, 63)" },
-    },
-    footerText: { color: "white", fontSize: 16 },
+    } 
   };
 }
 

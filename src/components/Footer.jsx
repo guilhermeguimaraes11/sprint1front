@@ -19,5 +19,6 @@ const footerStyle = {
       justifyContent: "center",
       borderTop: "5px solid white",
     };
+    
 
 export default Footer;

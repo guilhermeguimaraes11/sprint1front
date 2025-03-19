@@ -3,22 +3,15 @@ import { Box, Button, Container, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import home from "../../img/iconehome.png";
 import logo from "../../img/logo.png";
-import Footer from '../components/Footer';
+import Footer from "../components/Footer";
+import Header from "../components/Header";
 
 const HomePage = () => {
   const styles = getStyles();
 
   return (
-    <div style={{ backgroundColor: "#FFDCDC"}} >
-      <Box sx={styles.header}>
-        <Button component={Link} to="/home" sx={styles.buttonHome}>
-          <img
-            src={home}
-            alt="Home"
-            style={{ width: "65px", height: "65px" }}
-          />
-        </Button>
-      </Box>
+    <div style={{ backgroundColor: "#FFDCDC" }}>
+      <Header />
 
       <Container component="main" sx={styles.container}>
         <Box sx={styles.content}>
@@ -43,11 +36,9 @@ const HomePage = () => {
             Cadastre-se
           </Button>
         </Box>
-        
       </Container>
 
       <Footer />
-
     </div>
   );
 };
@@ -59,20 +50,7 @@ function getStyles() {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      height: "78.6vh",
-     
-    },
-    header: {
-      backgroundColor: "#D90000",
-      width: "100%",
-      height: "10vh",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "end",
-      borderBottom: "5px solid white",
-    },
-    buttonHome: {
-      mr: 2,
+      height: "78.3vh",
     },
     content: {
       display: "flex",
@@ -96,20 +74,6 @@ function getStyles() {
       width: "200px",
       backgroundColor: "rgba(177, 16, 16, 1)",
       color: "white",
-    },
-    footer: {
-      mt: "auto",
-      backgroundColor: "#D90000",
-      width: "100%",
-      height: "10vh",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      borderTop: "5px solid white",
-    },
-    footerText: {
-      color: "white",
-      fontSize: 16,
     },
   };
 }

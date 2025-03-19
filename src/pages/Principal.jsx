@@ -7,7 +7,6 @@ import Footer from '../components/Footer';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -60,7 +59,7 @@ function Principal() {
     <Container sx={styles.container}>
       <Box sx={styles.header}>
         <img src={logo} alt="Logo" style={styles.logo} />
-        <Button component={Link} to="/home" sx={styles.buttonHome}>
+        <Button component={Link} to="/" sx={styles.buttonHome}>
           <img
             src={logout}
             alt="Logout"
@@ -180,15 +179,6 @@ function getStyles() {
       fontSize: 20,
       paddingTop: 1.2,
       paddingBottom: 1.2,
-    },
-    footer: {
-      backgroundColor: "rgba(177, 16, 16, 1)",
-      width: "210vh",
-      height: "7vh",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      borderTop: "5px solid white",
     },
     footerText: {
       color: "white",
