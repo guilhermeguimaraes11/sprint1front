@@ -73,6 +73,7 @@ function getStyles() {
       width: "200px",
       backgroundColor: "rgba(177, 16, 16, 1)",
       color: "white",
+      borderRadius: "10px"
     },
   };
 }

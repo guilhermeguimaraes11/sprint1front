@@ -119,6 +119,7 @@ function getStyles() {
       flexDirection: "column",
       alignItems: "center",
       height: "78.6vh",
+
     },
     
     buttonHome: { mr: 2 },
@@ -129,12 +130,13 @@ function getStyles() {
       alignItems: "center",
       backgroundColor: "#FD7C7C",
       borderRadius: "10px",
-      width: "33%",
+      width: "39%",
       height:"110%"
     },
-    logo: { width: "220px", height: "auto", mb: 1, margin: "10px"},
+    logo: { width: "220px", height: "auto", mb: 5, mt: 4},
     textField: {
-      width: "50vh",
+      mt: 2,
+      width: "40vh",
       height: 50,
       backgroundColor: "white",
       borderRadius: 10,
@@ -146,14 +148,14 @@ function getStyles() {
       "& input::placeholder": { fontSize: "17px", color: "black" },
     },
     buttonCadastro: {
-      mt: 1,
+      mt: 3,
       color: "white",
       backgroundColor: "#A80805",
       width: 135,
       height: 40,
       fontWeight: 600,
       fontSize: 15,
-      borderRadius: 15,
+      borderRadius: 2,
       textTransform: "none",
       "&:hover": { backgroundColor: "rgba(255, 0, 0, 0.55)" },
     },
