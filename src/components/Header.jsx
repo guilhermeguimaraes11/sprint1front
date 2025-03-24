@@ -1,5 +1,5 @@
 import React from "react";
-import home from "../assets/iconehome.png";
+import logo from "../assets/logo.png";
 import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 
@@ -8,7 +8,6 @@ const Header = () => {
     <header style={headerStyle}>
       <div style={logoStyle}>
         <Button component={Link} to="/">
-        <img src={home} alt="Home" style={{ width: "65px", height: "65px" }} />
         </Button>
       </div>
     </header>

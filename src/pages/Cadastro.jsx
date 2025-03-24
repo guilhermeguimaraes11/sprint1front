@@ -6,7 +6,8 @@ import api from "../axios/axios";
 import Footer from '../components/Footer';
 import Header from "../components/Header";
 
-const Cadastro = () => {
+
+function Cadastro () {
   const styles = getStyles();
   const navigate = useNavigate();
   const [usuario, setUsuario] = useState({
@@ -15,6 +16,7 @@ const Cadastro = () => {
     cpf: "",
     senha: "",
   });
+
 
   const onChange = (event) => {
     const { name, value } = event.target;

@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { Box, Button, Container, TextField } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../assets/logo.png";
 import api from "../axios/axios";
+import logo from "../assets/logo.png";
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 
 
-const Login = () => {
+function Login() {
   const styles = getStyles();
-  const navigate = useNavigate();
   const [usuario, setUsuario] = useState({ email: "", senha: "" });
+  const navigate = useNavigate();
 
   const onChange = (event) => {
     const { name, value } = event.target;

@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import logout from "../assets/iconelogout.png";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import api from "../axios/axios";
-import Footer from '../components/Footer';
+import Footer from "../components/Footer";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -14,10 +13,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
-
 function Principal() {
   const styles = getStyles();
   const [salas, setSalas] = useState([]);
+  const navigate = useNavigate();
 
   async function getSalas() {
     await api.getSalas().then(
@@ -32,8 +31,16 @@ function Principal() {
   }
 
   useEffect(() => {
-    getSalas();
-  }, []);
+    const isAuthenticated = localStorage.getItem("authenticated");
+
+    if (!isAuthenticated) {
+      // Se não estiver autenticado, redireciona para a página de login
+      navigate("/");
+    } else {
+      // Se autenticado, faz a busca pelas salas
+      getSalas();
+    }
+  }, [navigate]);
 
   const listSalas = salas.map((sala) => (
     <TableRow key={sala.id_sala}>
@@ -59,13 +66,7 @@ function Principal() {
     <Container sx={styles.container}>
       <Box sx={styles.header}>
         <img src={logo} alt="Logo" style={styles.logo} />
-        <Button component={Link} to="/" sx={styles.buttonHome}>
-          <img
-            src={logout}
-            alt="Logout"
-            style={{ width: "58px", height: "58px" }}
-          />
-        </Button>
+        <Button component={Link} to="/" sx={styles.buttonHome}> </Button>
       </Box>
       <Box sx={styles.boxFundoTabela}>
         <Container sx={styles.container}>{/* Conteúdo da página */}</Container>
@@ -96,8 +97,6 @@ function Principal() {
         </TableContainer>
       </Box>
       <Footer />
-      
-      
     </Container>
   );
 }
@@ -140,8 +139,8 @@ function getStyles() {
     },
     table: {
       backgroundColor: "#FF7B7B",
-      marginTop:2.5,
-      marginBottom:2.5,
+      marginTop: 2.5,
+      marginBottom: 2.5,
       marginLeft: "auto", // Para centralizar
       marginRight: "auto", // Para centralizar
       width: "calc(100% - 40px)", // Ajuste o tamanho total da tabela
@@ -164,7 +163,6 @@ function getStyles() {
       fontWeight: "bold",
       fontSize: 22,
       paddingTop: 2,
-      
     },
     tableBody: {
       backgroundColor: "#949494",
