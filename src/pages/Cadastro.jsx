@@ -103,7 +103,7 @@ function Cadastro () {
             variant="text"
             sx={styles.buttonToLogin}
           >
-            Login
+            Já tem uma conta? Login
           </Button>
         </Box>
       </Container>
@@ -166,9 +166,10 @@ function getStyles() {
       color: "#A80805",
       backgroundColor: "transparent",
       fontWeight: "bold",
-      fontSize: 15.5,
+      fontSize: 16.5,
       textDecoration: "underline",
       textUnderlineOffset: "4px",
+      textTransform: "none",
       "&:hover": { color: "rgb(167, 63, 63)" },
     }
   };

@@ -43,7 +43,7 @@ function Login() {
         <Box component="img" src={logo} alt="Logo" sx={styles.logo} />
         <TextField required fullWidth id="email" placeholder="E-mail" name="email" margin="normal" value={usuario.email} onChange={onChange} sx={styles.textField} />
         <TextField required fullWidth id="senha" placeholder="Senha" name="senha" type="password" margin="normal" value={usuario.senha} onChange={onChange} sx={styles.textField} />
-        <Button type="submit" variant="contained" sx={styles.buttonLogin}>Login</Button>
+        <Button type="submit" variant="contained" sx={styles.buttonLogin}>Entrar</Button>
         <Button component={Link} to="/cadastro" variant="text" sx={styles.buttonCadastro}>Cadastre-se</Button>
       </Box>
       
