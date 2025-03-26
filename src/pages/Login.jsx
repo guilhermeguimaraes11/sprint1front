@@ -22,6 +22,7 @@ function Login() {
     try {
       const response = await api.postLogin(usuario);
       alert(response.data.message);
+      localStorage.setItem("authenticated", true);
       navigate("/principal");
     } catch (error) {
       console.log(error);
