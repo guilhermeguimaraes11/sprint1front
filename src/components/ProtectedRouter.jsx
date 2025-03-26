@@ -5,6 +5,6 @@ import Header from "../components/Header";
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem("authenticated");
   return isAuthenticated ? <div><Header/>{children}<Footer/></div> : <Navigate to="/" />;
-};
+};  
 
 export default ProtectedRoute;

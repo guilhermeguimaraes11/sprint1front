@@ -28,7 +28,7 @@ function Cadastro () {
     try {
       const response = await api.postCadastro(usuario);
       alert(response.data.message);
-      navigate("/principal");
+      navigate("/ListagemSalas");
     } catch (error) {
       console.log(error);
       alert(error.response.data.error);

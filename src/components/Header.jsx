@@ -1,13 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
-import HomeIcon from "@mui/icons-material/Home"; // Ícone de Home
+import HomeIcon from "@mui/icons-material/Home"; 
 
 const Header = () => {
   return (
     <header style={headerStyle}>
       <div style={logoStyle}>
-        {/* Botão com ícone de Home e maior tamanho */}
         <Button 
           component={Link} 
           to="/" 

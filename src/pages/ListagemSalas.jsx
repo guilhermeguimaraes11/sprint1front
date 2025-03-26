@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../axios/axios";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -11,7 +10,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
-function Principal() {
+function ListagemSalas() {
   const styles = getStyles();
   const [salas, setSalas] = useState([]);
   const navigate = useNavigate();
@@ -158,4 +157,4 @@ function getStyles() {
   };
 }
 
-export default Principal;
+export default ListagemSalas;
