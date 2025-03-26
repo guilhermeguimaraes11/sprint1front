@@ -7,6 +7,9 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 
 
+
+
+
 function Login() {
   const styles = getStyles();
   const [usuario, setUsuario] = useState({ email: "", senha: "" });
@@ -37,7 +40,12 @@ function Login() {
 
     <Header />
 
-    <Container component="main" sx={styles.container}>
+    
+
+
+    <Container component="main" sx={styles.container}
+    
+    >
       
       <Box component="form" sx={styles.form} onSubmit={handleSubmit} noValidate>
         <Box component="img" src={logo} alt="Logo" sx={styles.logo} />

@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../assets/logo.png";
 import api from "../axios/axios";
-import Footer from "../components/Footer";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -64,10 +62,6 @@ function Principal() {
 
   return (
     <Container sx={styles.container}>
-      <Box sx={styles.header}>
-        <img src={logo} alt="Logo" style={styles.logo} />
-        <Button component={Link} to="/" sx={styles.buttonHome}> </Button>
-      </Box>
       <Box sx={styles.boxFundoTabela}>
         <Container sx={styles.container}>{/* Conteúdo da página */}</Container>
 
@@ -96,7 +90,6 @@ function Principal() {
           </Table>
         </TableContainer>
       </Box>
-      <Footer />
     </Container>
   );
 }
@@ -114,22 +107,6 @@ function getStyles() {
       alignItems: "center",
       justifyContent: "center",
       flexDirection: "column",
-    },
-    header: {
-      backgroundColor: "#D90000",
-      width: "230vh",
-      height: "11vh",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "end",
-      borderBottom: "5px solid white",
-    },
-    logo: {
-      width: "230px",
-      height: "auto",
-      marginRight: "1540px",
-      border: "4px solid white",
-      borderRadius: 15,
     },
     buttonHome: {
       mr: 8,
@@ -177,11 +154,7 @@ function getStyles() {
       fontSize: 20,
       paddingTop: 1.2,
       paddingBottom: 1.2,
-    },
-    footerText: {
-      color: "white",
-      fontSize: 18,
-    },
+    }
   };
 }
 
