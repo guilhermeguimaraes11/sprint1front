@@ -49,7 +49,7 @@ function getStyles() {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      height: "78.3vh",
+      height: "78.6vh",
     },
     content: {
       display: "flex",
