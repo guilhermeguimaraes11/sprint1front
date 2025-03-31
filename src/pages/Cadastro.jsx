@@ -14,7 +14,7 @@ function Cadastro () {
     nomecompleto: "",
     email: "",
     cpf: "",
-    senha: "",
+    senha: "",  
   });
 
 
@@ -143,10 +143,16 @@ function getStyles() {
       backgroundColor: "white",
       borderRadius: 10,
       "& .MuiOutlinedInput-root": {
+        // Remove a borda do campo de entrada quando ele está em estado normal (sem foco ou hover)
         "& fieldset": { border: "none" },
+      
+        // Remove a borda do campo de entrada quando o mouse passa sobre ele (hover)
         "&:hover fieldset": { border: "none" },
+      
+        // Remove a borda do campo de entrada quando ele está em foco (clicado ou selecionado)
         "&.Mui-focused fieldset": { border: "none" },
       },
+      
       "& input::placeholder": { fontSize: "17px", color: "black" },
     },
     buttonCadastro: {
