@@ -3,6 +3,7 @@ import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
 import ListagemSalas from "./pages/ListagemSalas";
 import Home from "./pages/Home";
+import Calendario from "./pages/Calendario"; 
 import ProtectedRouter from "./components/ProtectedRouter";
 
 function App() {
@@ -17,6 +18,14 @@ function App() {
           element={
             <ProtectedRouter>
               <ListagemSalas />
+            </ProtectedRouter>
+          }
+        />
+        <Route
+          path="/Calendario"
+          element={
+            <ProtectedRouter>
+              <Calendario />
             </ProtectedRouter>
           }
         />

@@ -9,6 +9,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Button from "@mui/material/Button"; // Importando o botão
 
 function ListagemSalas() {
   const styles = getStyles();
@@ -62,7 +63,15 @@ function ListagemSalas() {
   return (
     <Container sx={styles.container}>
       <Box sx={styles.boxFundoTabela}>
-        <Container sx={styles.container}>{/* Conteúdo da página */}</Container>
+        {/* Adicionando o botão de navegação para a tela de Calendário */}
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate("/Calendario")} // Redireciona para a tela Calendário
+          sx={{ marginBottom: "20px" }}
+        >
+          Ir para Calendário
+        </Button>
 
         <TableContainer sx={styles.tableContainer}>
           <Table size="small" sx={styles.table}>
