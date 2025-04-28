@@ -4,6 +4,7 @@ import Cadastro from "./pages/Cadastro";
 import ListagemSalas from "./pages/ListagemSalas";
 import Home from "./pages/Home";
 import Calendario from "./pages/Calendario"; 
+import ReservarSala from "./pages/ReservarSala"; // <<< importação da nova página
 import ProtectedRouter from "./components/ProtectedRouter";
 
 function App() {
@@ -26,6 +27,14 @@ function App() {
           element={
             <ProtectedRouter>
               <Calendario />
+            </ProtectedRouter>
+          }
+        />
+        <Route
+          path="/reservar-sala" // <<< Nova rota adicionada
+          element={
+            <ProtectedRouter>
+              <ReservarSala />
             </ProtectedRouter>
           }
         />

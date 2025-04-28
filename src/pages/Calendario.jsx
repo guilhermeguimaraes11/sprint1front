@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
+import axios from "axios"; // Importando axios para chamadas HTTP
 
 const meses = [
   "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
@@ -16,6 +17,7 @@ function Calendario() {
   const navigate = useNavigate();
   const [mesAtual, setMesAtual] = useState(new Date().getMonth());
   const [anoAtual, setAnoAtual] = useState(new Date().getFullYear());
+  const [reservas, setReservas] = useState([]); // Estado para armazenar as reservas
 
   useEffect(() => {
     const isAuthenticated = localStorage.getItem("authenticated");
@@ -55,6 +57,24 @@ function Calendario() {
     Array.from({ length: totalDias }, (_, i) => i + 1)
   );
 
+  const handleDiaClick = async (dia) => {
+    if (dia) {
+      const dataSelecionada = `${anoAtual}-${String(mesAtual + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+      try {
+        const response = await axios.get(`/api/reservas?data=${dataSelecionada}`); // Chamada ao backend
+        setReservas(response.data); // Atualiza o estado com as reservas para essa data
+        navigate(`/reservar-sala?data=${dataSelecionada}`);
+      } catch (error) {
+        console.error("Erro ao buscar as reservas:", error);
+      }
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("authenticated");
+    navigate("/");
+  };
+
   return (
     <Container maxWidth="xl" sx={{ height: "100vh", backgroundColor: "#FFE6E6", display: "flex" }}>
       <Box sx={{ width: 250, backgroundColor: "#f2f2f2", paddingTop: 2 }}>
@@ -72,6 +92,7 @@ function Calendario() {
                   backgroundColor: "#e6e6e6"
                 }
               }}
+              onClick={item === "Finalizar seção" ? handleLogout : undefined}
             >
               {item}
             </Box>
@@ -86,13 +107,6 @@ function Calendario() {
             <Typography variant="h6" fontWeight="bold">Escolha uma data</Typography>
             <Typography variant="body2">
               Clique no dia e as salas a serem reservadas nele serão exibidas.
-            </Typography>
-          </Paper>
-          <Paper sx={styles.card}>
-            <Box sx={styles.cardClose}>x</Box>
-            <Typography variant="h6" fontWeight="bold">Navegue pelo menu</Typography>
-            <Typography variant="body2">
-              Todas as abas do site estão exibidas no menu à esquerda.
             </Typography>
           </Paper>
         </Box>
@@ -111,7 +125,12 @@ function Calendario() {
             ))}
             {diasCalendario.map((dia, i) => (
               <Grid item xs={1.71} key={"day-" + i}>
-                <Paper sx={dia ? styles.day : { visibility: "hidden" }}>{dia}</Paper>
+                <Paper
+                  sx={dia ? styles.day : { display: "none" }}
+                  onClick={() => handleDiaClick(dia)}
+                >
+                  {dia}
+                </Paper>
               </Grid>
             ))}
           </Grid>
@@ -160,7 +179,12 @@ const styles = {
   day: {
     border: "1px solid #ddd",
     padding: 1,
-    textAlign: "center"
+    textAlign: "center",
+    cursor: "pointer",
+    '&:hover': { backgroundColor: "#e6e6e6" },
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 };
 
