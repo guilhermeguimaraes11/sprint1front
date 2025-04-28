@@ -9,6 +9,8 @@ const sheets = {
   postLogin: (usuario ) => api.post("login/", usuario),
   postCadastro: (usuario) => api.post("user/", usuario),
   getSalas: (sala) => api.get("salas/", sala),
+  postReserva: (reserva) => api.post("reservaschedule", reserva),
+
 };
 
 export default sheets;

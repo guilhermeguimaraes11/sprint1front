@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import api from "../axios/axios";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -9,36 +9,94 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Button from "@mui/material/Button"; // Importando o botão
+import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
+import TextField from "@mui/material/TextField";
+import CircularProgress from "@mui/material/CircularProgress";
 
 function ListagemSalas() {
   const styles = getStyles();
   const [salas, setSalas] = useState([]);
+  const [reservas, setReservas] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedSala, setSelectedSala] = useState(null);
+  const [formData, setFormData] = useState({ data: "", horarioInicio: "", horarioFim: "" });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   async function getSalas() {
-    await api.getSalas().then(
-      (response) => {
-        console.log(response.data.salas);
-        setSalas(response.data.salas);
-      },
-      (error) => {
-        console.log("Erro", error);
-      }
-    );
+    try {
+      const response = await api.getSalas();
+      setSalas(response.data.salas);
+    } catch (error) {
+      console.log("Erro", error);
+    }
+  }
+
+  async function getReservas() {
+    try {
+      const response = await api.getReservas();
+      setReservas(response.data.reservas);
+    } catch (error) {
+      console.log("Erro ao buscar reservas", error);
+    }
   }
 
   useEffect(() => {
     const isAuthenticated = localStorage.getItem("authenticated");
 
     if (!isAuthenticated) {
-      // Se não estiver autenticado, redireciona para a página de login
       navigate("/");
     } else {
-      // Se autenticado, faz a busca pelas salas
       getSalas();
+      getReservas();
     }
   }, [navigate]);
+
+  const handleOpenModal = (sala) => {
+    setSelectedSala(sala);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedSala(null);
+    setFormData({ data: "", horarioInicio: "", horarioFim: "" });
+    setOpenModal(false);
+  };
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleReserva = async () => {
+    if (!selectedSala) return;
+    setLoading(true);
+    try {
+      const id_usuario = localStorage.getItem("id_usuario"); // Você precisa salvar isso no login
+      await api.postReserva({
+        data: formData.data,
+        horario_inicio: formData.horarioInicio,
+        horario_fim: formData.horarioFim,
+        fk_id_sala: selectedSala.id_sala,
+        fk_id_usuario: id_usuario,
+      });
+      await getReservas(); // Atualizar a lista de reservas
+      handleCloseModal();
+      alert("Reserva realizada com sucesso!");
+    } catch (error) {
+      console.error("Erro ao reservar sala", error);
+      alert("Erro ao reservar sala.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const isSalaReservada = (salaId) => {
+    return reservas.some((reserva) => reserva.fk_id_sala === salaId);
+  };
 
   const listSalas = salas.map((sala) => (
     <TableRow key={sala.id_sala}>
@@ -57,17 +115,26 @@ function ListagemSalas() {
       <TableCell align="center" sx={styles.tableBodyCell}>
         {sala.capacidade}
       </TableCell>
+      <TableCell align="center" sx={styles.tableBodyCell}>
+        <Button
+          variant="contained"
+          color={isSalaReservada(sala.id_sala) ? "secondary" : "primary"}
+          disabled={isSalaReservada(sala.id_sala)}
+          onClick={() => handleOpenModal(sala)}
+        >
+          {isSalaReservada(sala.id_sala) ? "Reservada" : "Reservar"}
+        </Button>
+      </TableCell>
     </TableRow>
   ));
 
   return (
     <Container sx={styles.container}>
       <Box sx={styles.boxFundoTabela}>
-        {/* Adicionando o botão de navegação para a tela de Calendário */}
         <Button
           variant="contained"
           color="primary"
-          onClick={() => navigate("/Calendario")} // Redireciona para a tela Calendário
+          onClick={() => navigate("/Calendario")}
           sx={{ marginBottom: "20px" }}
         >
           Ir para Calendário
@@ -77,27 +144,64 @@ function ListagemSalas() {
           <Table size="small" sx={styles.table}>
             <TableHead sx={styles.tableHead}>
               <TableRow sx={styles.tableRow}>
-                <TableCell align="center" sx={styles.tableCell}>
-                  Nome
-                </TableCell>
-                <TableCell align="center" sx={styles.tableCell}>
-                  Descrição
-                </TableCell>
-                <TableCell align="center" sx={styles.tableCell}>
-                  Bloco
-                </TableCell>
-                <TableCell align="center" sx={styles.tableCell}>
-                  Tipo
-                </TableCell>
-                <TableCell align="center" sx={styles.tableCell}>
-                  Capacidade
-                </TableCell>
+                <TableCell align="center" sx={styles.tableCell}>Nome</TableCell>
+                <TableCell align="center" sx={styles.tableCell}>Descrição</TableCell>
+                <TableCell align="center" sx={styles.tableCell}>Bloco</TableCell>
+                <TableCell align="center" sx={styles.tableCell}>Tipo</TableCell>
+                <TableCell align="center" sx={styles.tableCell}>Capacidade</TableCell>
+                <TableCell align="center" sx={styles.tableCell}>Ações</TableCell>
               </TableRow>
             </TableHead>
             <TableBody sx={styles.tableBody}>{listSalas}</TableBody>
           </Table>
         </TableContainer>
       </Box>
+
+      <Modal open={openModal} onClose={handleCloseModal}>
+        <Box sx={styles.modal}>
+          <h2>Reservar Sala</h2>
+          <TextField
+            label="Data"
+            type="date"
+            name="data"
+            value={formData.data}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            label="Horário Início"
+            type="time"
+            name="horarioInicio"
+            value={formData.horarioInicio}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            label="Horário Fim"
+            type="time"
+            name="horarioFim"
+            value={formData.horarioFim}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            InputLabelProps={{ shrink: true }}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleReserva}
+            disabled={loading}
+            fullWidth
+            sx={{ mt: 2 }}
+          >
+            {loading ? <CircularProgress size={24} color="inherit" /> : "Confirmar Reserva"}
+          </Button>
+        </Box>
+      </Modal>
     </Container>
   );
 }
@@ -116,24 +220,18 @@ function getStyles() {
       justifyContent: "center",
       flexDirection: "column",
     },
-    buttonHome: {
-      mr: 8,
-    },
-    tableContainer: {
-      backgroundColor: "transparent",
-    },
+    tableContainer: { backgroundColor: "transparent" },
     table: {
       backgroundColor: "#FF7B7B",
       marginTop: 2.5,
       marginBottom: 2.5,
-      marginLeft: "auto", // Para centralizar
-      marginRight: "auto", // Para centralizar
-      width: "calc(100% - 40px)", // Ajuste o tamanho total da tabela
-      borderRadius: "15px", // Bordas arredondadas
+      marginLeft: "auto",
+      marginRight: "auto",
+      width: "calc(100% - 40px)",
+      borderRadius: "15px",
     },
     tableHead: {
       backgroundColor: "#FF7B7B",
-      borderRadius: "50px",
       border: "2px solid white",
     },
     boxFundoTabela: {
@@ -162,7 +260,19 @@ function getStyles() {
       fontSize: 20,
       paddingTop: 1.2,
       paddingBottom: 1.2,
-    }
+    },
+    modal: {
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      width: 400,
+      bgcolor: "background.paper",
+      border: "2px solid #000",
+      boxShadow: 24,
+      p: 4,
+      borderRadius: 2,
+    },
   };
 }
 
