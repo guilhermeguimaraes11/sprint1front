@@ -46,7 +46,7 @@ function ListagemSalas() {
     const isAuthenticated = localStorage.getItem("authenticated");
 
     if (!isAuthenticated) {
-      navigate("/");
+      navigate("/"); 
     } else {
       getSalas();
       getReservas();
@@ -131,15 +131,6 @@ function ListagemSalas() {
   return (
     <Container sx={styles.container}>
       <Box sx={styles.boxFundoTabela}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => navigate("/Calendario")}
-          sx={{ marginBottom: "20px" }}
-        >
-          Ir para Calendário
-        </Button>
-
         <TableContainer sx={styles.tableContainer}>
           <Table size="small" sx={styles.table}>
             <TableHead sx={styles.tableHead}>
