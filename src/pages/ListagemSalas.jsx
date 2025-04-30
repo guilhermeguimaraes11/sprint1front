@@ -14,6 +14,8 @@ import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
 
+  
+
 function ListagemSalas() {
   const styles = getStyles();
   const [salas, setSalas] = useState([]);
@@ -24,7 +26,9 @@ function ListagemSalas() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+
   async function getSalas() {
+ 
     try {
       const response = await api.getSalas();
       setSalas(response.data.salas);
@@ -34,6 +38,7 @@ function ListagemSalas() {
   }
 
   async function getReservas() {
+    
     try {
       const response = await api.getReservas();
       setReservas(response.data.reservas);

@@ -26,8 +26,8 @@ function Login() {
       const response = await api.postLogin(usuario);
       alert(response.data.message);
       localStorage.setItem("authenticated", true);
-      localStorage.setItem("id_usuario", response.data.id_usuario); // <<< AQUI salva o ID do usuário!
-      navigate("/ListagemSalas");
+      localStorage.setItem("id_usuario", response.data.user.id_usuario);
+      navigate("/ListagemSalas",{ state: { user: response.data.user } }); 
     } catch (error) {
       console.log(error);
       alert(error.response?.data?.error || "Erro ao fazer login");
