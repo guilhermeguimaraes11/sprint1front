@@ -14,8 +14,6 @@ import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
 
-  
-
 function ListagemSalas() {
   const styles = getStyles();
   const [salas, setSalas] = useState([]);
@@ -24,11 +22,10 @@ function ListagemSalas() {
   const [selectedSala, setSelectedSala] = useState(null);
   const [formData, setFormData] = useState({ data: "", horarioInicio: "", horarioFim: "" });
   const [loading, setLoading] = useState(false);
+  const [filtro, setFiltro] = useState("");
   const navigate = useNavigate();
 
-
   async function getSalas() {
- 
     try {
       const response = await api.getSalas();
       setSalas(response.data.salas);
@@ -38,7 +35,6 @@ function ListagemSalas() {
   }
 
   async function getReservas() {
-    
     try {
       const response = await api.getReservas();
       setReservas(response.data.reservas);
@@ -51,7 +47,7 @@ function ListagemSalas() {
     const isAuthenticated = localStorage.getItem("authenticated");
 
     if (!isAuthenticated) {
-      navigate("/"); 
+      navigate("/");
     } else {
       getSalas();
       getReservas();
@@ -80,7 +76,7 @@ function ListagemSalas() {
     if (!selectedSala) return;
     setLoading(true);
     try {
-      const id_usuario = localStorage.getItem("id_usuario"); // Você precisa salvar isso no login
+      const id_usuario = localStorage.getItem("id_usuario");
       await api.postReserva({
         data: formData.data,
         horario_inicio: formData.horarioInicio,
@@ -88,12 +84,12 @@ function ListagemSalas() {
         fk_id_sala: selectedSala.id_sala,
         fk_id_usuario: id_usuario,
       });
-      await getReservas(); // Atualizar a lista de reservas
+      await getReservas();
       handleCloseModal();
       alert("Reserva realizada com sucesso!");
     } catch (error) {
       console.error("Erro ao reservar sala", error);
-      alert("Erro ao reservar sala.");
+      alert(error.response.data.error);
     } finally {
       setLoading(false);
     }
@@ -103,7 +99,17 @@ function ListagemSalas() {
     return reservas.some((reserva) => reserva.fk_id_sala === salaId);
   };
 
-  const listSalas = salas.map((sala) => (
+  const salasFiltradas = salas.filter((sala) => {
+    const termo = filtro.toLowerCase();
+    return (
+      sala.nome.toLowerCase().includes(termo) ||
+      sala.descricao.toLowerCase().includes(termo) ||
+      sala.bloco.toLowerCase().includes(termo) ||
+      sala.tipo.toLowerCase().includes(termo)
+    );
+  });
+
+  const listSalas = salasFiltradas.map((sala) => (
     <TableRow key={sala.id_sala}>
       <TableCell align="center" sx={styles.tableBodyCell}>
         {sala.nome}
@@ -135,6 +141,16 @@ function ListagemSalas() {
 
   return (
     <Container sx={styles.container}>
+      {/* Campo de busca */}
+      <TextField
+        label="Buscar sala"
+        variant="outlined"
+        fullWidth
+        sx={{ mt: 4, mb: 2, width: "60%" }}
+        value={filtro}
+        onChange={(e) => setFiltro(e.target.value)}
+      />
+
       <Box sx={styles.boxFundoTabela}>
         <TableContainer sx={styles.tableContainer}>
           <Table size="small" sx={styles.table}>

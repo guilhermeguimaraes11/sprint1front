@@ -5,6 +5,7 @@ import ListagemSalas from "./pages/ListagemSalas";
 import Home from "./pages/Home";
 import ProtectedRouter from "./components/ProtectedRouter";
 
+
 function App() {
   return (
     <Router>
@@ -20,6 +21,8 @@ function App() {
             </ProtectedRouter>
           }
         />
+
+       
       </Routes>
     </Router>
   );
