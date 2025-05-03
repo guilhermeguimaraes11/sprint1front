@@ -127,14 +127,23 @@ function ListagemSalas() {
         {sala.capacidade}
       </TableCell>
       <TableCell align="center" sx={styles.tableBodyCell}>
-        <Button
-          variant="contained"
-          color={isSalaReservada(sala.id_sala) ? "secondary" : "primary"}
-          disabled={isSalaReservada(sala.id_sala)}
-          onClick={() => handleOpenModal(sala)}
-        >
-          {isSalaReservada(sala.id_sala) ? "Reservada" : "Reservar"}
-        </Button>
+      <Button
+  variant="contained"
+  disabled={isSalaReservada(sala.id_sala)}
+  onClick={() => handleOpenModal(sala)}
+  sx={{
+    backgroundColor: isSalaReservada(sala.id_sala) ? '#B0B0B0' : '#FF5757',
+    '&:hover': {
+      backgroundColor: isSalaReservada(sala.id_sala) ? '#B0B0B0' : '#e14e4e',
+    },
+    color: '#fff',
+    fontWeight: 'bold',
+    borderRadius: 2,
+  }}
+>
+  {isSalaReservada(sala.id_sala) ? 'Reservada' : 'Reservar'}
+</Button>
+
       </TableCell>
     </TableRow>
   ));
@@ -202,16 +211,25 @@ function ListagemSalas() {
             margin="normal"
             InputLabelProps={{ shrink: true }}
           />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleReserva}
-            disabled={loading}
-            fullWidth
-            sx={{ mt: 2 }}
-          >
-            {loading ? <CircularProgress size={24} color="inherit" /> : "Confirmar Reserva"}
-          </Button>
+       <Button
+  variant="contained"
+  onClick={handleReserva}
+  disabled={loading}
+  fullWidth
+  sx={{
+    mt: 2,
+    backgroundColor: '#FF5757',
+    '&:hover': {
+      backgroundColor: '#e14e4e',
+    },
+    color: '#fff',
+    fontWeight: 'bold',
+    borderRadius: 2,
+  }}
+>
+  {loading ? <CircularProgress size={24} color="inherit" /> : "Confirmar Reserva"}
+</Button>
+
         </Box>
       </Modal>
     </Container>
