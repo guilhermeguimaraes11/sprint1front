@@ -204,7 +204,7 @@ function ListagemSalas() {
       {/* Tabela de salas */}
       <Box sx={styles.boxFundoTabela}>
         <TableContainer sx={styles.tableContainer}>
-          <Table size="small" sx={styles.table}>
+          <Table size="small" sx={styles.table}>  
             <TableHead sx={styles.tableHead}>
               <TableRow sx={styles.tableRow}>
                 <TableCell align="center" sx={styles.tableCell}>
