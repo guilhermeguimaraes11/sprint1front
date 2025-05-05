@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../axios/axios";
+
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Table from "@mui/material/Table";
@@ -15,16 +16,21 @@ import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
 
 function ListagemSalas() {
-  const styles = getStyles();
-  const [salas, setSalas] = useState([]);
-  const [reservas, setReservas] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
-  const [selectedSala, setSelectedSala] = useState(null);
-  const [formData, setFormData] = useState({ data: "", horarioInicio: "", horarioFim: "" });
-  const [loading, setLoading] = useState(false);
-  const [filtro, setFiltro] = useState("");
-  const navigate = useNavigate();
+  const styles = getStyles(); 
+  const [salas, setSalas] = useState([]); // Lista de salas
+  const [reservas, setReservas] = useState([]); // Lista de reservas
+  const [openModal, setOpenModal] = useState(false); 
+  const [selectedSala, setSelectedSala] = useState(null); // Sala selecionada para reserva
+  const [formData, setFormData] = useState({
+    data: "",
+    horarioInicio: "",
+    horarioFim: "",
+  }); 
+  const [loading, setLoading] = useState(false); 
+  const [filtro, setFiltro] = useState(""); // Campo de busca
+  const navigate = useNavigate(); 
 
+ 
   async function getSalas() {
     try {
       const response = await api.getSalas();
@@ -43,28 +49,32 @@ function ListagemSalas() {
     }
   }
 
+  // useEffect que verifica autenticação e carrega os dados iniciais
   useEffect(() => {
     const isAuthenticated = localStorage.getItem("authenticated");
 
     if (!isAuthenticated) {
-      navigate("/");
+      navigate("/"); // Redireciona se não estiver autenticado
     } else {
-      getSalas();
-      getReservas();
+      getSalas(); // Busca salas
+      getReservas(); // Busca reservas
     }
   }, [navigate]);
 
+  // Abre o modal e define a sala selecionada
   const handleOpenModal = (sala) => {
     setSelectedSala(sala);
     setOpenModal(true);
   };
 
+  // Fecha o modal e limpa os dados
   const handleCloseModal = () => {
     setSelectedSala(null);
     setFormData({ data: "", horarioInicio: "", horarioFim: "" });
     setOpenModal(false);
   };
 
+  // Atualiza o estado do formulário conforme o usuário digita
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -72,6 +82,7 @@ function ListagemSalas() {
     }));
   };
 
+  // Realiza a requisição de reserva da sala
   const handleReserva = async () => {
     if (!selectedSala) return;
     setLoading(true);
@@ -84,21 +95,23 @@ function ListagemSalas() {
         fk_id_sala: selectedSala.id_sala,
         fk_id_usuario: id_usuario,
       });
-      await getReservas();
+      await getReservas(); // Atualiza lista de reservas
       handleCloseModal();
       alert("Reserva realizada com sucesso!");
     } catch (error) {
       console.error("Erro ao reservar sala", error);
-      alert(error.response.data.error);
+      alert(error.response?.data?.error || "Erro ao reservar");
     } finally {
       setLoading(false);
     }
   };
 
+  // Verifica se a sala está reservada
   const isSalaReservada = (salaId) => {
     return reservas.some((reserva) => reserva.fk_id_sala === salaId);
   };
 
+  // Filtra as salas com base no texto digitado
   const salasFiltradas = salas.filter((sala) => {
     const termo = filtro.toLowerCase();
     return (
@@ -109,7 +122,8 @@ function ListagemSalas() {
     );
   });
 
-  const listSalas = salasFiltradas.map((sala) => (
+  // Renderização das linhas da tabela com ações
+  const listSalas = salasFiltradas.map((sala, index) => (
     <TableRow key={sala.id_sala}>
       <TableCell align="center" sx={styles.tableBodyCell}>
         {sala.nome}
@@ -127,30 +141,54 @@ function ListagemSalas() {
         {sala.capacidade}
       </TableCell>
       <TableCell align="center" sx={styles.tableBodyCell}>
-      <Button
-  variant="contained"
-  disabled={isSalaReservada(sala.id_sala)}
-  onClick={() => handleOpenModal(sala)}
-  sx={{
-    backgroundColor: isSalaReservada(sala.id_sala) ? '#B0B0B0' : '#FF5757',
-    '&:hover': {
-      backgroundColor: isSalaReservada(sala.id_sala) ? '#B0B0B0' : '#e14e4e',
-    },
-    color: '#fff',
-    fontWeight: 'bold',
-    borderRadius: 2,
-  }}
->
-  {isSalaReservada(sala.id_sala) ? 'Reservada' : 'Reservar'}
-</Button>
+        <Button
+          variant="contained"
+          disabled={isSalaReservada(sala.id_sala)}
+          onClick={() => handleOpenModal(sala)}
+          sx={{
+            backgroundColor: isSalaReservada(sala.id_sala)
+              ? "#B0B0B0"
+              : "#FF5757",
+            "&:hover": {
+              backgroundColor: isSalaReservada(sala.id_sala)
+                ? "#B0B0B0"
+                : "#e14e4e",
+            },
+            color: "#fff",
+            fontWeight: "bold",
+            borderRadius: 2,
+          }}
+        >
+          {isSalaReservada(sala.id_sala) ? "Reservada" : "Reservar"}
+        </Button>
 
+        {/* Botão "Ver Disponibilidade" apenas para a primeira sala da lista */}
+        {index === 0 && (
+          <Button
+            variant="outlined"
+            onClick={() => navigate(`/Disponibilidade/${sala.id_sala}`)}
+            sx={{
+              marginTop: 1,
+              color: "white",
+              borderColor: "#FF5757",
+              "&:hover": {
+                borderColor: "#e14e4e",
+                backgroundColor: "",
+              },
+              fontWeight: "bold",
+              borderRadius: 2,
+            }}
+          >
+            Ver Disponibilidade
+          </Button>
+        )}
       </TableCell>
     </TableRow>
   ));
 
   return (
     <Container sx={styles.container}>
-      {/* Campo de busca */}
+      {/* Campo de filtro de busca */}
       <TextField
         label="Buscar sala"
         variant="outlined"
@@ -160,17 +198,30 @@ function ListagemSalas() {
         onChange={(e) => setFiltro(e.target.value)}
       />
 
+      {/* Tabela de salas */}
       <Box sx={styles.boxFundoTabela}>
         <TableContainer sx={styles.tableContainer}>
           <Table size="small" sx={styles.table}>
             <TableHead sx={styles.tableHead}>
               <TableRow sx={styles.tableRow}>
-                <TableCell align="center" sx={styles.tableCell}>Nome</TableCell>
-                <TableCell align="center" sx={styles.tableCell}>Descrição</TableCell>
-                <TableCell align="center" sx={styles.tableCell}>Bloco</TableCell>
-                <TableCell align="center" sx={styles.tableCell}>Tipo</TableCell>
-                <TableCell align="center" sx={styles.tableCell}>Capacidade</TableCell>
-                <TableCell align="center" sx={styles.tableCell}>Ações</TableCell>
+                <TableCell align="center" sx={styles.tableCell}>
+                  Nome
+                </TableCell>
+                <TableCell align="center" sx={styles.tableCell}>
+                  Descrição
+                </TableCell>
+                <TableCell align="center" sx={styles.tableCell}>
+                  Bloco
+                </TableCell>
+                <TableCell align="center" sx={styles.tableCell}>
+                  Tipo
+                </TableCell>
+                <TableCell align="center" sx={styles.tableCell}>
+                  Capacidade
+                </TableCell>
+                <TableCell align="center" sx={styles.tableCell}>
+                  Ações
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody sx={styles.tableBody}>{listSalas}</TableBody>
@@ -178,6 +229,7 @@ function ListagemSalas() {
         </TableContainer>
       </Box>
 
+      {/* Modal de reserva */}
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box sx={styles.modal}>
           <h2>Reservar Sala</h2>
@@ -211,39 +263,54 @@ function ListagemSalas() {
             margin="normal"
             InputLabelProps={{ shrink: true }}
           />
-       <Button
-  variant="contained"
-  onClick={handleReserva}
-  disabled={loading}
-  fullWidth
-  sx={{
-    mt: 2,
-    backgroundColor: '#FF5757',
-    '&:hover': {
-      backgroundColor: '#e14e4e',
-    },
-    color: '#fff',
-    fontWeight: 'bold',
-    borderRadius: 2,
-  }}
->
-  {loading ? <CircularProgress size={24} color="inherit" /> : "Confirmar Reserva"}
-</Button>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1, mt: 2 }}>
+            <Button
+              variant="contained"
+              onClick={handleReserva}
+              disabled={loading}
+              sx={{
+                backgroundColor: "#FF5757",
+                "&:hover": { backgroundColor: "#e14e4e" },
+                color: "#fff",
+                fontWeight: "bold",
+                borderRadius: 2,
+              }}
+            >
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                "Confirmar"
+              )}
+            </Button>
 
+            <Button
+              variant="outlined"
+              onClick={handleCloseModal}
+              sx={{
+                color: "#FF5757",
+                borderColor: "#FF5757",
+                "&:hover": {
+                  borderColor: "#e14e4e",
+                  backgroundColor: "#ffecec",
+                },
+                fontWeight: "bold",
+                borderRadius: 2,
+              }}
+            >
+              Cancelar
+            </Button>
+          </Box>
         </Box>
       </Modal>
     </Container>
   );
 }
 
+// Estilização centralizada da aplicação
 function getStyles() {
   return {
     container: {
-      backgroundColor: "#FFDCDC",
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundRepeat: "no-repeat",
-      height: "auto",
+      backgroundColor: "#red", // OBS: "#red" não é uma cor válida! Use "#FF0000" ou remova
       minWidth: "100%",
       display: "flex",
       alignItems: "center",
@@ -260,12 +327,7 @@ function getStyles() {
       width: "calc(100% - 40px)",
       borderRadius: "15px",
     },
-    tableHead: {
-      backgroundColor: "#FF7B7B",
-      border: "2px solid white",
-    },
     boxFundoTabela: {
-      border: "5px solid white",
       borderRadius: "15px",
       backgroundColor: "#FFC2C2",
       width: "90%",
@@ -277,16 +339,9 @@ function getStyles() {
       fontSize: 22,
       paddingTop: 2,
     },
-    tableBody: {
-      backgroundColor: "#949494",
-      border: "3px solid white",
-      borderRadius: 10,
-    },
     tableBodyCell: {
       backgroundColor: "#FF7B7B",
       border: "1px solid white",
-      borderRadius: 10,
-      color: "black",
       fontSize: 20,
       paddingTop: 1.2,
       paddingBottom: 1.2,
@@ -298,8 +353,6 @@ function getStyles() {
       transform: "translate(-50%, -50%)",
       width: 400,
       bgcolor: "background.paper",
-      border: "2px solid #000",
-      boxShadow: 24,
       p: 4,
       borderRadius: 2,
     },

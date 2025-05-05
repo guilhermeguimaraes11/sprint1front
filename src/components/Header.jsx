@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
-import HomeIcon from "@mui/icons-material/Home"; 
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const Header = () => {
   return (
@@ -10,9 +10,9 @@ const Header = () => {
         <Button 
           component={Link} 
           to="/" 
-          startIcon={<HomeIcon sx={{ fontSize: 40 }} />} // Ajusta o tamanho do ícone
+          startIcon={<LogoutIcon sx={{ fontSize: 40 }} />} // Ajusta o tamanho do ícone
           sx={buttonStyle}>
-          Home
+          Logout
         </Button>
       </div>
     </header>
