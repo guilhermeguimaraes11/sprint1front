@@ -16,25 +16,26 @@ import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
 
 function ListagemSalas() {
-  const styles = getStyles(); 
+  const styles = getStyles();
   const [salas, setSalas] = useState([]); // Lista de salas
   const [reservas, setReservas] = useState([]); // Lista de reservas
-  const [openModal, setOpenModal] = useState(false); 
+  const [openModal, setOpenModal] = useState(false);
   const [selectedSala, setSelectedSala] = useState(null); // Sala selecionada para reserva
   const [formData, setFormData] = useState({
     data: "",
     horarioInicio: "",
     horarioFim: "",
-  }); 
-  const [loading, setLoading] = useState(false); 
+  });
+  const [loading, setLoading] = useState(false);
   const [filtro, setFiltro] = useState(""); // Campo de busca
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
- 
+
+  // Função para buscar as salas
   async function getSalas() {
     try {
       const response = await api.getSalas();
-      setSalas(response.data.salas);
+      setSalas(response.data.salas); // Atualiza o estado com a lista de salas
     } catch (error) {
       console.log("Erro", error);
     }
@@ -78,7 +79,7 @@ function ListagemSalas() {
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value,  // Atualiza o campo específico do formulário
     }));
   };
 
@@ -106,6 +107,8 @@ function ListagemSalas() {
     }
   };
 
+
+  
   // Verifica se a sala está reservada
   const isSalaReservada = (salaId) => {
     return reservas.some((reserva) => reserva.fk_id_sala === salaId);
@@ -162,7 +165,7 @@ function ListagemSalas() {
           {isSalaReservada(sala.id_sala) ? "Reservada" : "Reservar"}
         </Button>
 
-        {/* Botão "Ver Disponibilidade" apenas para a primeira sala da lista */}
+        {/* Botão "Ver Disponibilidade" */}
         {index === 0 && (
           <Button
             variant="outlined"
@@ -310,7 +313,6 @@ function ListagemSalas() {
 function getStyles() {
   return {
     container: {
-      backgroundColor: "#red", // OBS: "#red" não é uma cor válida! Use "#FF0000" ou remova
       minWidth: "100%",
       display: "flex",
       alignItems: "center",
