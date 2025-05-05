@@ -28,6 +28,7 @@ function Cadastro () {
     try {
       const response = await api.postCadastro(usuario);
       alert(response.data.message);
+      localStorage.setItem("token", response.data.token)
       navigate("/ListagemSalas");
     } catch (error) {
       console.log(error);

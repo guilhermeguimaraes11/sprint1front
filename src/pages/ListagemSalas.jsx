@@ -169,7 +169,7 @@ function ListagemSalas() {
         {index === 0 && (
           <Button
             variant="outlined"
-            onClick={() => navigate(`/Disponibilidade/${sala.id_sala}`)}
+            onClick={() => navigate(`/DisponibilidadeSala/${sala.id_sala}`)}
             sx={{
               marginTop: 1,
               color: "white",
