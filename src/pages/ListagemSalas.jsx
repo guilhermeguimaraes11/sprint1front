@@ -18,7 +18,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 function ListagemSalas() {
   const styles = getStyles();
   const [salas, setSalas] = useState([]); // Lista de salas
-  const [reservas, setReservas] = useState([]); // Lista de reservas
+  const [reservas, setReservas] = useState([])
   const [openModal, setOpenModal] = useState(false);
   const [selectedSala, setSelectedSala] = useState(null); // Sala selecionada para reserva
   const [formData, setFormData] = useState({
@@ -68,14 +68,13 @@ function ListagemSalas() {
     setOpenModal(true);
   };
 
-  // Fecha o modal e limpa os dados
   const handleCloseModal = () => {
     setSelectedSala(null);
     setFormData({ data: "", horarioInicio: "", horarioFim: "" });
     setOpenModal(false);
   };
 
-  // Atualiza o estado do formulário conforme o usuário digita
+  // Atualiza o estado do formulário conforme o usuário digita, guarda o estado anterior e atualiza oque eu quero
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -268,7 +267,6 @@ function ListagemSalas() {
           />
           <Box sx={{ display: "flex", flexDirection: "column", gap: 1, mt: 2 }}>
             <Button
-              variant="contained"
               onClick={handleReserva}
               disabled={loading}
               sx={{
