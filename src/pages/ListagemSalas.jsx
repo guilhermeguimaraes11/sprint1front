@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../axios/axios";
 
@@ -11,25 +11,18 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Button from "@mui/material/Button";
-import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
-import CircularProgress from "@mui/material/CircularProgress";
+import ReservaModal from "../components/ReservaModal"; // Importe o componente ReservaModal
 
 function ListagemSalas() {
   const styles = getStyles();
   const [salas, setSalas] = useState([]); // Lista de salas
-  const [reservas, setReservas] = useState([])
+  const [reservas, setReservas] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedSala, setSelectedSala] = useState(null); // Sala selecionada para reserva
-  const [formData, setFormData] = useState({
-    data: "",
-    horarioInicio: "",
-    horarioFim: "",
-  });
   const [loading, setLoading] = useState(false);
   const [filtro, setFiltro] = useState(""); // Campo de busca
   const navigate = useNavigate();
-
 
   // Função para buscar as salas
   async function getSalas() {
@@ -70,20 +63,11 @@ function ListagemSalas() {
 
   const handleCloseModal = () => {
     setSelectedSala(null);
-    setFormData({ data: "", horarioInicio: "", horarioFim: "" });
     setOpenModal(false);
   };
 
-  // Atualiza o estado do formulário conforme o usuário digita, guarda o estado anterior e atualiza oque eu quero
-  const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,  // Atualiza o campo específico do formulário
-    }));
-  };
-
   // Realiza a requisição de reserva da sala
-  const handleReserva = async () => {
+  const handleReserva = async (formData) => {
     if (!selectedSala) return;
     setLoading(true);
     try {
@@ -106,8 +90,6 @@ function ListagemSalas() {
     }
   };
 
-
-  
   // Verifica se a sala está reservada
   const isSalaReservada = (salaId) => {
     return reservas.some((reserva) => reserva.fk_id_sala === salaId);
@@ -203,7 +185,7 @@ function ListagemSalas() {
       {/* Tabela de salas */}
       <Box sx={styles.boxFundoTabela}>
         <TableContainer sx={styles.tableContainer}>
-          <Table size="small" sx={styles.table}>  
+          <Table size="small" sx={styles.table}>
             <TableHead sx={styles.tableHead}>
               <TableRow sx={styles.tableRow}>
                 <TableCell align="center" sx={styles.tableCell}>
@@ -231,78 +213,14 @@ function ListagemSalas() {
         </TableContainer>
       </Box>
 
-      {/* Modal de reserva */}
-      <Modal open={openModal} onClose={handleCloseModal}>
-        <Box sx={styles.modal}>
-          <h2>Reservar Sala</h2>
-          <TextField
-            label="Data"
-            type="date"
-            name="data"
-            value={formData.data}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            InputLabelProps={{ shrink: true }}
-          />
-          <TextField
-            label="Horário Início"
-            type="time"
-            name="horarioInicio"
-            value={formData.horarioInicio}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            InputLabelProps={{ shrink: true }}
-          />
-          <TextField
-            label="Horário Fim"
-            type="time"
-            name="horarioFim"
-            value={formData.horarioFim}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            InputLabelProps={{ shrink: true }}
-          />
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1, mt: 2 }}>
-            <Button
-              onClick={handleReserva}
-              disabled={loading}
-              sx={{
-                backgroundColor: "#FF5757",
-                "&:hover": { backgroundColor: "#e14e4e" },
-                color: "#fff",
-                fontWeight: "bold",
-                borderRadius: 2,
-              }}
-            >
-              {loading ? (
-                <CircularProgress size={24} color="inherit" />
-              ) : (
-                "Confirmar"
-              )}
-            </Button>
-
-            <Button
-              variant="outlined"
-              onClick={handleCloseModal}
-              sx={{
-                color: "#FF5757",
-                borderColor: "#FF5757",
-                "&:hover": {
-                  borderColor: "#e14e4e",
-                  backgroundColor: "#ffecec",
-                },
-                fontWeight: "bold",
-                borderRadius: 2,
-              }}
-            >
-              Cancelar
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
+      {selectedSala && (
+        <ReservaModal
+          open={openModal}
+          onClose={handleCloseModal}
+          onReserva={handleReserva}
+          loading={loading}
+        />
+      )}
     </Container>
   );
 }
@@ -360,3 +278,4 @@ function getStyles() {
 }
 
 export default ListagemSalas;
+

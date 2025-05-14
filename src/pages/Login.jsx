@@ -33,7 +33,7 @@ function Login() {
 
   return (
     <div style={{ backgroundColor: "#FFDCDC" }}>
-      <Header />
+      <Header logout={false} />
 
       <Container component="main" sx={styles.container}>
         <Box
