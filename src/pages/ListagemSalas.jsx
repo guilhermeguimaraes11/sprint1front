@@ -234,6 +234,7 @@ function getStyles() {
       alignItems: "center",
       justifyContent: "center",
       flexDirection: "column",
+      backgroundColor:"#ffdcdc"
     },
     tableContainer: { backgroundColor: "transparent" },
     table: {

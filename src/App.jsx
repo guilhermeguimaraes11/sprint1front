@@ -2,9 +2,12 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
 import ListagemSalas from "./pages/ListagemSalas";
-import DisponibilidadeSala from "./pages/DisponibilidadeSala"; 
+import DisponibilidadeSala from "./pages/DisponibilidadeSala";
 import Home from "./pages/Home";
 import ProtectedRouter from "./components/ProtectedRouter";
+import Reservas from "./pages/MinhaReservas";
+import Conta from "./pages/ConfiguracoesConta";
+import ConfiguracoesConta from "./pages/ConfiguracoesConta";
 
 function App() {
   return (
@@ -13,7 +16,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
-        
+
         <Route
           path="/ListagemSalas"
           element={
@@ -22,13 +25,30 @@ function App() {
             </ProtectedRouter>
           }
         />
-        
-        {/* Rota para a tela de Disponibilidade usando fk_id_sala */}
+
         <Route
           path="/DisponibilidadeSala/:fk_id_sala"
           element={
             <ProtectedRouter>
               <DisponibilidadeSala />
+            </ProtectedRouter>
+          }
+        />
+
+        <Route
+          path="/reservas"
+          element={
+            <ProtectedRouter>
+              <Reservas />
+            </ProtectedRouter>
+          }
+        />
+
+        <Route
+          path="/configuracoes"
+          element={
+            <ProtectedRouter>
+              <ConfiguracoesConta />
             </ProtectedRouter>
           }
         />
