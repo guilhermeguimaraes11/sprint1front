@@ -7,12 +7,13 @@ import Home from "./pages/Home";
 import ProtectedRouter from "./components/ProtectedRouter";
 import Reservas from "./pages/MinhaReservas";
 import ConfiguracoesConta from "./pages/ConfiguracoesConta";
+import MinhasReservas from "./pages/MinhaReservas";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Reservas />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
 
