@@ -22,6 +22,7 @@ function Login() {
       const response = await api.postLogin(usuario);
       alert(response.data.message);
       localStorage.setItem("token", response.data.token)
+      localStorage.setItem("authenticated", true);
      
       localStorage.setItem("id_usuario", response.data.user.id_usuario);
       navigate("/ListagemSalas", { state: { user: response.data.user } });

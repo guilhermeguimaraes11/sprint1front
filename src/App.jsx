@@ -6,7 +6,6 @@ import DisponibilidadeSala from "./pages/DisponibilidadeSala";
 import Home from "./pages/Home";
 import ProtectedRouter from "./components/ProtectedRouter";
 import Reservas from "./pages/MinhaReservas";
-import Conta from "./pages/ConfiguracoesConta";
 import ConfiguracoesConta from "./pages/ConfiguracoesConta";
 
 function App() {
