@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../components/Header"; // importe o Header
+import Header from "../components/Header";
+import FinalizarSecao from "../components/FinalizarSecao";
 
 import {
   Box,
@@ -10,8 +11,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  Button,
-  Modal,
   CircularProgress,
 } from "@mui/material";
 
@@ -23,7 +22,6 @@ function ConfiguracoesConta() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Busca os dados do usuário no localStorage para exibição
   const fetchUserData = () => {
     setLoading(true);
     try {
@@ -32,7 +30,7 @@ function ConfiguracoesConta() {
       const emailSalvo = localStorage.getItem("email");
 
       if (!userId || !nomeSalvo || !emailSalvo) {
-        navigate("/"); // redireciona para login caso falte algum dado
+        navigate("/");
         return;
       }
 
@@ -64,7 +62,6 @@ function ConfiguracoesConta() {
 
   return (
     <>
-      {/* Header com logout desabilitado */}
       <Header logout={false} />
 
       <Box display="flex" height="100vh" bgcolor="#fff">
@@ -92,7 +89,7 @@ function ConfiguracoesConta() {
             )}
             <ListItem
               button
-              sx={{  borderRadius: 1 }}
+              sx={{ borderRadius: 1 }}
               onClick={() => setModalAberto(true)}
             >
               <ListItemText
@@ -139,71 +136,17 @@ function ConfiguracoesConta() {
                 </Typography>
                 <Typography variant="body1">{email}</Typography>
               </Box>
-
-              <Button
-                variant="contained"
-                onClick={() => setModalAberto(true)}
-                sx={{
-                  backgroundColor: "red",
-                  color: "white",
-                  "&:hover": { backgroundColor: "#c62828" },
-                }}
-              >
-                Sair da sessão
-              </Button>
             </>
           )}
         </Box>
       </Box>
 
-      {/* Modal de confirmação */}
-      <Modal open={modalAberto} onClose={() => setModalAberto(false)}>
-        <Box
-          bgcolor="#fd7c7c"
-          color="black"
-          p={4}
-          borderRadius={4}
-          boxShadow={24}
-          maxWidth={400}
-          mx="auto"
-          mt="20vh"
-          textAlign="center"
-        >
-          <Typography variant="h5" fontWeight="bold" mb={1}>
-            Você deseja encerrar a sessão?
-          </Typography>
-          <Typography fontWeight="bold" mb={4}>
-            Sua conta será desconectada
-          </Typography>
-
-          <Box display="flex" justifyContent="space-evenly">
-            <Button
-              onClick={handleLogout}
-              variant="contained"
-              sx={{
-                backgroundColor: "darkred",
-                color: "white",
-                borderRadius: 2,
-                px: 5,
-              }}
-            >
-              Sim
-            </Button>
-            <Button
-              onClick={() => setModalAberto(false)}
-              variant="contained"
-              sx={{
-                backgroundColor: "darkred",
-                color: "white",
-                borderRadius: 2,
-                px: 5,
-              }}
-            >
-              Não
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
+      {/* Modal de confirmação de logout */}
+      <FinalizarSecao
+        open={modalAberto}
+        onConfirm={handleLogout}
+        onCancel={() => setModalAberto(false)}
+      />
     </>
   );
 }

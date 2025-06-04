@@ -1,25 +1,70 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import Button from "@mui/material/Button";
-import LogoutIcon from '@mui/icons-material/Logout';
+// src/components/Header.jsx
 
-const Header = ({ logout = true }) => { // <--- AQUI: recebe a prop logout
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from "@mui/material";
+import LogoutIcon from "@mui/icons-material/Logout";
+
+const Header = ({ logout = true }) => {
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogoutClick = () => {
+    setOpenConfirm(true);
+  };
+
+  const handleConfirm = () => {
+    localStorage.clear();
+    setOpenConfirm(false);
+    navigate("/");
+  };
+
+  const handleCancel = () => {
+    setOpenConfirm(false);
+  };
+
   return (
-    <header style={headerStyle}>
-      <div style={logoStyle}>
-        {logout && ( // <--- AQUI: mostra o botão só se logout for true
-          <Button 
-            component={Link} 
-            to="/" 
-            startIcon={<LogoutIcon sx={{ fontSize: 40 }} />}
-            sx={buttonStyle}>
-            Logout
+    <>
+      <header style={headerStyle}>
+        <div style={logoStyle}>
+          {logout && (
+            <Button
+              onClick={handleLogoutClick}
+              startIcon={<LogoutIcon sx={{ fontSize: 40 }} />}
+              sx={buttonStyle}
+            >
+              Logout
+            </Button>
+          )}
+        </div>
+      </header>
+
+      <Dialog open={openConfirm} onClose={handleCancel}>
+        <DialogTitle>Finalizar Sessão</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Você deseja realmente encerrar a sessão?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleConfirm} color="error" variant="contained">
+            Sim
           </Button>
-        )}
-      </div>
-    </header>
+          <Button onClick={handleCancel} color="primary" variant="outlined">
+            Não
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
-}; 
+};
 
 const headerStyle = {
   backgroundColor: "#D90000",
@@ -27,7 +72,7 @@ const headerStyle = {
   height: "10vh",
   display: "flex",
   alignItems: "center",
-  justifyContent: "flex-end", // Alinha o botão para a direita
+  justifyContent: "flex-end",
   borderBottom: "5px solid white",
 };
 
@@ -42,12 +87,12 @@ const buttonStyle = {
   color: "white",
   fontWeight: "bold",
   textTransform: "none",
-  marginRight: "30px", // Adiciona mais espaçamento à direita
-  padding: "15px 30px", // Aumenta o tamanho do botão
-  fontSize: "18px", // Aumenta o tamanho da fonte
-  borderRadius: "8px", // Bordas arredondadas
+  marginRight: "30px",
+  padding: "15px 30px",
+  fontSize: "18px",
+  borderRadius: "8px",
   "&:hover": {
-    backgroundColor: "rgba(255, 255, 255, 0.2)", // Efeito ao passar o mouse
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
   },
 };
 

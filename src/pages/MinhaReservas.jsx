@@ -16,11 +16,13 @@ import {
 
 import Header from "../components/Header";
 import ModalDeletarReserva from "../components/ModalDeletarReserva";
+import FinalizarSecao from "../components/FinalizarSecao";
 
 function MinhasReservas() {
   const [reservas, setReservas] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [reservaParaCancelar, setReservaParaCancelar] = useState(null);
+  const [logoutOpen, setLogoutOpen] = useState(false);
   const navigate = useNavigate();
 
   const fetchReservas = async () => {
@@ -105,8 +107,8 @@ function MinhasReservas() {
             )}
             <ListItem
               button
-              sx={{borderRadius: 1 }}
-              onClick={handleLogout}
+              sx={{ borderRadius: 1 }}
+              onClick={() => setLogoutOpen(true)}
             >
               <ListItemText
                 primary="Finalizar sessão"
@@ -177,11 +179,18 @@ function MinhasReservas() {
         </Box>
       </Box>
 
-      {/* Modal para confirmar exclusão de reserva */}
+      {/* Modal de confirmação de exclusão de reserva */}
       <ModalDeletarReserva
         open={modalOpen}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelModal}
+      />
+
+      {/* Modal de confirmação de logout */}
+      <FinalizarSecao
+        open={logoutOpen}
+        onConfirm={handleLogout}
+        onCancel={() => setLogoutOpen(false)}
       />
     </>
   );
