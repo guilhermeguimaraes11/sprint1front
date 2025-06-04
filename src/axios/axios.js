@@ -9,7 +9,7 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = `${token}`;
   }
   return config;
 });
@@ -19,6 +19,7 @@ const sheets = {
   postCadastro: (usuario) => api.post("user/", usuario),
   getSalas: () => api.get("salas/"),
   postReserva: (reserva) => api.post("reservaschedule/", reserva),
+  getReservas_id: (id) => api.get(`reservaschedule/${id}`), 
   deleteReserva: (id) => api.delete(`reservaschedule/${id}`),
   getAllreserva_salas: () => api.get("reservaschedule"),
  

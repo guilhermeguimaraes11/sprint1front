@@ -89,7 +89,7 @@ function ListagemSalas() {
       alert("Reserva realizada com sucesso!");
     } catch (err) {
       console.error("Erro ao reservar sala:", err);
-      alert(err.response?.data?.error || "Erro ao reservar");
+      alert(err.response.data.error || "Erro ao reservar");
     } finally {
       setLoading(false);
     }

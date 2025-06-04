@@ -17,34 +17,41 @@ function Login() {
   };
 
   const handleSubmit = async (event) => {
-  event.preventDefault();
-  try {
-    const response = await api.postLogin(usuario);
-    const user = response.data.user;
+    event.preventDefault();
+    try {
+      const response = await api.postLogin(usuario);
+      const user = response.data.user;
 
-    // ✅ Armazena tudo necessário no localStorage
-    localStorage.setItem("token", response.data.token);
-    localStorage.setItem("authenticated", "true");
-    localStorage.setItem("id_usuario", user.id_usuario);
-    localStorage.setItem("nome", user.nome);     // <-- adicione isso
-    localStorage.setItem("email", user.email);   // <-- e isso também
+      localStorage.setItem("id_usuario", response.data.user.id_usuario);
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("authenticated", "true");
+      localStorage.setItem("nome", response.data.user.nome);
+      localStorage.setItem("email", response.data.user.email);
 
-    alert("Login realizado com sucesso!");
+      alert("Login realizado com sucesso!");
 
-    // Redireciona
-    navigate("/ListagemSalas", { state: { user } });
-  } catch (error) {
-    console.error("Erro no login:", error);
-    alert(error.response?.data?.error || "Erro ao fazer login. Verifique suas credenciais.");
-  }
-};
+      // Redireciona
+      navigate("/ListagemSalas", { state: { user } });
+    } catch (error) {
+      console.error("Erro no login:", error);
+      alert(
+        error.response?.data?.error ||
+          "Erro ao fazer login. Verifique suas credenciais."
+      );
+    }
+  };
 
   return (
     <div style={{ backgroundColor: "#FFDCDC" }}>
       <Header logout={false} />
 
       <Container component="main" sx={styles.container}>
-        <Box component="form" sx={styles.form} onSubmit={handleSubmit} noValidate>
+        <Box
+          component="form"
+          sx={styles.form}
+          onSubmit={handleSubmit}
+          noValidate
+        >
           <Box component="img" src={logo} alt="Logo" sx={styles.logo} />
 
           <TextField
@@ -76,7 +83,12 @@ function Login() {
             Entrar
           </Button>
 
-          <Button component={Link} to="/cadastro" variant="text" sx={styles.buttonCadastro}>
+          <Button
+            component={Link}
+            to="/cadastro"
+            variant="text"
+            sx={styles.buttonCadastro}
+          >
             Cadastre-se
           </Button>
         </Box>

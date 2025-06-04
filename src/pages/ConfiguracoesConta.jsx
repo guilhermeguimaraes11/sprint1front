@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../axios/axios";
 
@@ -23,7 +23,7 @@ function ConfiguracoesConta() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Busca os dados do usuário no localStorage para preencher os campos
+  // 1) Busca os dados do usuário no localStorage para preencher os campos
   const fetchUserData = () => {
     setLoading(true);
     try {
@@ -31,11 +31,13 @@ function ConfiguracoesConta() {
       const nomeSalvo = localStorage.getItem("nome");
       const emailSalvo = localStorage.getItem("email");
 
+      // Se não houver userId, nome ou email, redireciona ao login
       if (!userId || !nomeSalvo || !emailSalvo) {
-        navigate("/"); // redireciona para login se faltar dados
+        navigate("/");
         return;
       }
 
+      // Preenche os estados com os valores do localStorage
       setNome(nomeSalvo);
       setEmail(emailSalvo);
       setError(null);
@@ -47,7 +49,7 @@ function ConfiguracoesConta() {
     }
   };
 
-  // Função para atualizar os dados do usuário via API
+  // 2) Função para atualizar os dados do usuário via API
   const handleUpdateUser = async () => {
     try {
       setLoading(true);
@@ -62,7 +64,7 @@ function ConfiguracoesConta() {
         userDataToUpdate.senha = senha;
       }
 
-      // Exemplo: supondo que sua API tenha esse método
+      // Chama o endpoint updateUsuario (supondo que exista em api.js)
       await api.updateUsuario(userId, userDataToUpdate);
 
       // Atualiza localStorage com os novos dados
@@ -83,7 +85,7 @@ function ConfiguracoesConta() {
   useEffect(() => {
     const isAuth = localStorage.getItem("authenticated");
     if (!isAuth) {
-      navigate("/");
+      navigate("/"); // redireciona se não estiver autenticado
     } else {
       fetchUserData();
     }
