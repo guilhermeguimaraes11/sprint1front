@@ -1,3 +1,5 @@
+// src/pages/MinhasReservas.jsx
+
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../axios/axios";
@@ -10,21 +12,26 @@ import {
   List,
   ListItem,
   ListItemText,
-  Modal,
 } from "@mui/material";
 
-import Header from "../components/Header"; // Importando Header
+import Header from "../components/Header";
+import ConfirmDialog from "../components/ConfirmDialog";
 
 function MinhasReservas() {
   const [reservas, setReservas] = useState([]);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [reservaParaCancelar, setReservaParaCancelar] = useState(null);
   const navigate = useNavigate();
-  const [modalAberto, setModalAberto] = useState(false);
 
+  // Busca todas as reservas do usuário
   const fetchReservas = async () => {
     try {
       const userId = localStorage.getItem("id_usuario");
       const response = await api.getAllreserva_salas();
-      const minhas = response.data.reserva_sala.filter(
+      // Ajuste para refletir a estrutura de dados que sua API retorna:
+      // no seu exemplo mais recente, era response.data.reserva_sala
+      const todas = response.data.reserva_sala || response.data;
+      const minhas = todas.filter(
         (r) => String(r.fk_id_usuario) === String(userId)
       );
       setReservas(minhas);
@@ -34,14 +41,31 @@ function MinhasReservas() {
     }
   };
 
-  const handleCancelar = async (reservaId) => {
-    if (!window.confirm("Deseja realmente cancelar esta reserva?")) return;
+  // Abre o confirmDialog, armazenando a reserva que será cancelada
+  const handleOpenConfirm = (reservaId) => {
+    setReservaParaCancelar(reservaId);
+    setConfirmOpen(true);
+  };
+
+  // Fecha o confirmDialog sem fazer nada
+  const handleCancelConfirm = () => {
+    setConfirmOpen(false);
+    setReservaParaCancelar(null);
+  };
+
+  // Se o usuário confirmar, efetua o delete
+  const handleConfirmDelete = async () => {
+    if (!reservaParaCancelar) return;
     try {
-      await api.deleteReserva(reservaId);
+      await api.deleteReserva(reservaParaCancelar);
+      // Após o delete, recarrega as reservas
       fetchReservas();
     } catch (error) {
       console.error("Erro ao cancelar reserva", error);
       alert("Não foi possível cancelar a reserva");
+    } finally {
+      setConfirmOpen(false);
+      setReservaParaCancelar(null);
     }
   };
 
@@ -56,7 +80,6 @@ function MinhasReservas() {
 
   const handleLogout = () => {
     localStorage.clear();
-    setModalAberto(false);
     navigate("/");
   };
 
@@ -77,12 +100,11 @@ function MinhasReservas() {
                   button
                   key={idx}
                   onClick={() => {
-                    if (item === "Listagem de salas")
-                      navigate("/ListagemSalas");
+                    if (item === "Listagem de salas") navigate("/ListagemSalas");
                     if (item === "Minhas reservas") navigate("/reservas");
                     if (item === "Configurações") navigate("/configuracoes");
                   }}
-                  sx={{ cursor: "pointer" }} // Para garantir cursor pointer
+                  sx={{ cursor: "pointer" }}
                 >
                   <ListItemText primary={item} />
                 </ListItem>
@@ -92,7 +114,7 @@ function MinhasReservas() {
             <ListItem
               button
               sx={{ backgroundColor: "#ffcccc", borderRadius: 1 }}
-              onClick={() => setModalAberto(true)}
+              onClick={() => setConfirmOpen(true)} // reutilize o mesmo "confirm" para Logout
             >
               <ListItemText
                 primary="Finalizar sessão"
@@ -148,7 +170,7 @@ function MinhasReservas() {
 
                 <Button
                   variant="contained"
-                  onClick={() => handleCancelar(reserva.id_reserva)}
+                  onClick={() => handleOpenConfirm(reserva.id_reserva)}
                   sx={{
                     backgroundColor: "#A80805",
                     color: "white",
@@ -163,54 +185,23 @@ function MinhasReservas() {
         </Box>
       </Box>
 
-      {/* Modal para finalizar sessão */}
-      <Modal open={modalAberto} onClose={() => setModalAberto(false)}>
-        <Box
-          bgcolor="#fd7c7c"
-          color="black"
-          p={4}
-          borderRadius={4}
-          boxShadow={24}
-          maxWidth={400}
-          mx="auto"
-          mt="20vh"
-          textAlign="center"
-        >
-          <Typography variant="h5" fontWeight="bold" mb={1}>
-            Você deseja encerrar a sessão?
-          </Typography>
-          <Typography fontWeight="bold" mb={4}>
-            Sua conta será desconectada
-          </Typography>
+      {/** Modal de confirmação para CANCELAR RESERVA **/}
+      <ConfirmDialog
+        open={confirmOpen && Boolean(reservaParaCancelar)}
+        title="Cancelar Reserva"
+        message="Deseja realmente cancelar esta reserva?"
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelConfirm}
+      />
 
-          <Box display="flex" justifyContent="space-evenly">
-            <Button
-              onClick={handleLogout}
-              variant="contained"
-              sx={{
-                backgroundColor: "darkred",
-                color: "white",
-                borderRadius: 2,
-                px: 5,
-              }}
-            >
-              Sim
-            </Button>
-            <Button
-              onClick={() => setModalAberto(false)}
-              variant="contained"
-              sx={{
-                backgroundColor: "darkred",
-                color: "white",
-                borderRadius: 2,
-                px: 5,
-              }}
-            >
-              Não
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
+      {/** Modal de confirmação para LOGOUT (reaproveitando o mesmo) **/}
+      <ConfirmDialog
+        open={confirmOpen && !reservaParaCancelar}
+        title="Finalizar Sessão"
+        message="Deseja realmente encerrar sua sessão?"
+        onConfirm={handleLogout}
+        onCancel={handleCancelConfirm}
+      />
     </>
   );
 }

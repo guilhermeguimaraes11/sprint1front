@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../axios/axios";
 
 import {
   Box,
@@ -8,7 +7,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  TextField,
   Button,
   Modal,
   CircularProgress,
@@ -18,12 +16,11 @@ function ConfiguracoesConta() {
   const [modalAberto, setModalAberto] = useState(false);
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // 1) Busca os dados do usuário no localStorage para preencher os campos
+  // Busca os dados do usuário no localStorage para exibição
   const fetchUserData = () => {
     setLoading(true);
     try {
@@ -31,13 +28,11 @@ function ConfiguracoesConta() {
       const nomeSalvo = localStorage.getItem("nome");
       const emailSalvo = localStorage.getItem("email");
 
-      // Se não houver userId, nome ou email, redireciona ao login
       if (!userId || !nomeSalvo || !emailSalvo) {
         navigate("/");
         return;
       }
 
-      // Preenche os estados com os valores do localStorage
       setNome(nomeSalvo);
       setEmail(emailSalvo);
       setError(null);
@@ -49,43 +44,10 @@ function ConfiguracoesConta() {
     }
   };
 
-  // 2) Função para atualizar os dados do usuário via API
-  const handleUpdateUser = async () => {
-    try {
-      setLoading(true);
-      const userId = localStorage.getItem("id_usuario");
-      if (!userId) {
-        alert("Usuário não autenticado.");
-        return;
-      }
-
-      const userDataToUpdate = { nome, email };
-      if (senha) {
-        userDataToUpdate.senha = senha;
-      }
-
-      // Chama o endpoint updateUsuario (supondo que exista em api.js)
-      await api.updateUsuario(userId, userDataToUpdate);
-
-      // Atualiza localStorage com os novos dados
-      localStorage.setItem("nome", nome);
-      localStorage.setItem("email", email);
-
-      alert("Dados atualizados com sucesso!");
-      setSenha(""); // limpa campo senha
-      setError(null);
-    } catch (err) {
-      console.error("Erro ao atualizar usuário:", err);
-      setError("Não foi possível atualizar os dados.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     const isAuth = localStorage.getItem("authenticated");
     if (!isAuth) {
-      navigate("/"); // redireciona se não estiver autenticado
+      navigate("/");
     } else {
       fetchUserData();
     }
@@ -140,7 +102,7 @@ function ConfiguracoesConta() {
         {/* Conteúdo principal */}
         <Box flexGrow={1} bgcolor="#ffd6d6" p={5}>
           <Typography variant="h4" color="#a80805" fontWeight="bold" mb={4}>
-            Configurações da conta:
+            Informações do usuário
           </Typography>
 
           {loading ? (
@@ -158,52 +120,18 @@ function ConfiguracoesConta() {
           ) : (
             <>
               <Box mb={3}>
-                <Typography fontWeight="bold">Nome:</Typography>
-                <TextField
-                  fullWidth
-                  value={nome}
-                  onChange={(e) => setNome(e.target.value)}
-                  variant="filled"
-                  InputProps={{ style: { backgroundColor: "#fd7c7c" } }}
-                />
+                <Typography variant="subtitle1" fontWeight="bold">
+                  Nome:
+                </Typography>
+                <Typography variant="body1">{nome}</Typography>
               </Box>
 
               <Box mb={3}>
-                <Typography fontWeight="bold">Email:</Typography>
-                <TextField
-                  fullWidth
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  variant="filled"
-                  InputProps={{ style: { backgroundColor: "#fd7c7c" } }}
-                />
+                <Typography variant="subtitle1" fontWeight="bold">
+                  Email:
+                </Typography>
+                <Typography variant="body1">{email}</Typography>
               </Box>
-
-              <Box mb={4}>
-                <Typography fontWeight="bold">Nova Senha (opcional):</Typography>
-                <TextField
-                  fullWidth
-                  type="password"
-                  value={senha}
-                  onChange={(e) => setSenha(e.target.value)}
-                  placeholder="Deixe em branco para manter a senha atual"
-                  variant="filled"
-                  InputProps={{ style: { backgroundColor: "#fd7c7c" } }}
-                />
-              </Box>
-
-              <Button
-                variant="contained"
-                onClick={handleUpdateUser}
-                sx={{
-                  backgroundColor: "#A80805",
-                  color: "white",
-                  "&:hover": { backgroundColor: "#c62828" },
-                  mr: 2,
-                }}
-              >
-                Salvar Alterações
-              </Button>
 
               <Button
                 variant="contained"

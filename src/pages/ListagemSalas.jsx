@@ -116,7 +116,7 @@ function ListagemSalas() {
           <IconButton
             color="gray"
             aria-label="configurações"
-            onClick={() => navigate("/reservas")}
+            onClick={() => navigate("/configuracoes")}
             size="large"
           >
             <SettingsIcon fontSize="inherit" />
