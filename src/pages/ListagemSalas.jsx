@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../axios/axios";
-
+import Header from "../components/Header";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Table from "@mui/material/Table";
@@ -12,6 +12,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import IconButton from "@mui/material/IconButton";
+import SettingsIcon from "@mui/icons-material/Settings";
 import ReservaModal from "../components/ReservaModal";
 
 function ListagemSalas() {
@@ -106,93 +108,110 @@ function ListagemSalas() {
   });
 
   return (
-    <Container sx={styles.container}>
-      <TextField
-        label="Buscar sala"
-        variant="outlined"
-        fullWidth
-        sx={{ mt: 4, mb: 2, width: "60%" }}
-        value={filtro}
-        onChange={(e) => setFiltro(e.target.value)}
-      />
+    <>
+      <Header logout={true} />
+      <Container sx={styles.container}>
+        {/* Botão engrenagem no canto superior direito */}
+        <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", pt: 2, pr: 2 }}>
+          <IconButton
+            color="gray"
+            aria-label="configurações"
+            onClick={() => navigate("/reservas")}
+            size="large"
+          >
+            <SettingsIcon fontSize="inherit" />
+          </IconButton>
+        </Box>
 
-      <Box sx={styles.boxFundoTabela}>
-        <TableContainer sx={styles.tableContainer}>
-          <Table size="small" sx={styles.table}>
-            <TableHead sx={styles.tableHead}>
-              <TableRow sx={styles.tableRow}>
-                {["Nome", "Descrição", "Bloco", "Tipo", "Capacidade", "Ações"].map((h) => (
-                  <TableCell key={h} align="center" sx={styles.tableCell}>
-                    {h}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-
-            <TableBody sx={styles.tableBody}>
-              {salasFiltradas.map((sala, idx) => (
-                <TableRow key={sala.id_sala}>
-                  <TableCell align="center" sx={styles.tableBodyCell}>
-                    {sala.nome}
-                  </TableCell>
-                  <TableCell align="center" sx={styles.tableBodyCell}>
-                    {sala.descricao}
-                  </TableCell>
-                  <TableCell align="center" sx={styles.tableBodyCell}>
-                    {sala.bloco}
-                  </TableCell>
-                  <TableCell align="center" sx={styles.tableBodyCell}>
-                    {sala.tipo}
-                  </TableCell>
-                  <TableCell align="center" sx={styles.tableBodyCell}>
-                    {sala.capacidade}
-                  </TableCell>
-                  <TableCell align="center" sx={styles.tableBodyCell}>
-                    <Button
-                      variant="contained"
-                      disabled={isSalaReservada(sala.id_sala)}
-                      onClick={() => handleOpenModal(sala)}
-                      sx={{
-                        backgroundColor: isSalaReservada(sala.id_sala) ? "#B0B0B0" : "#FF5757",
-                        "&:hover": { backgroundColor: isSalaReservada(sala.id_sala) ? "#B0B0B0" : "#e14e4e" },
-                        color: "#fff",
-                        fontWeight: "bold",
-                        borderRadius: 2,
-                        mr: 1,
-                      }}
-                    >
-                      {isSalaReservada(sala.id_sala) ? "Reservada" : "Reservar"}
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      onClick={() => navigate(`/DisponibilidadeSala/${sala.id_sala}`)}
-                      sx={{
-                        color: "#FF5757",
-                        borderColor: "#FF5757",
-                        "&:hover": { borderColor: "#e14e4e" },
-                        fontWeight: "bold",
-                        borderRadius: 2,
-                      }}
-                    >
-                      Ver Disponibilidade
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
-
-      {selectedSala && (
-        <ReservaModal
-          open={openModal}
-          onClose={handleCloseModal}
-          onReserva={handleReserva}
-          loading={loading}
+        <TextField
+          label="Buscar sala"
+          variant="outlined"
+          fullWidth
+          sx={{ mt: 2, mb: 2, width: "60%" }}
+          value={filtro}
+          onChange={(e) => setFiltro(e.target.value)}
         />
-      )}
-    </Container>
+
+        <Box sx={styles.boxFundoTabela}>
+          <TableContainer sx={styles.tableContainer}>
+            <Table size="small" sx={styles.table}>
+              <TableHead sx={styles.tableHead}>
+                <TableRow sx={styles.tableRow}>
+                  {["Nome", "Descrição", "Bloco", "Tipo", "Capacidade", "Ações"].map((h) => (
+                    <TableCell key={h} align="center" sx={styles.tableCell}>
+                      {h}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+
+              <TableBody sx={styles.tableBody}>
+                {salasFiltradas.map((sala) => (
+                  <TableRow key={sala.id_sala}>
+                    <TableCell align="center" sx={styles.tableBodyCell}>
+                      {sala.nome}
+                    </TableCell>
+                    <TableCell align="center" sx={styles.tableBodyCell}>
+                      {sala.descricao}
+                    </TableCell>
+                    <TableCell align="center" sx={styles.tableBodyCell}>
+                      {sala.bloco}
+                    </TableCell>
+                    <TableCell align="center" sx={styles.tableBodyCell}>
+                      {sala.tipo}
+                    </TableCell>
+                    <TableCell align="center" sx={styles.tableBodyCell}>
+                      {sala.capacidade}
+                    </TableCell>
+                    <TableCell align="center" sx={styles.tableBodyCell}>
+                      <Button
+                        variant="contained"
+                        disabled={isSalaReservada(sala.id_sala)}
+                        onClick={() => handleOpenModal(sala)}
+                        sx={{
+                          backgroundColor: isSalaReservada(sala.id_sala) ? "#B0B0B0" : "#FF5757",
+                          "&:hover": {
+                            backgroundColor: isSalaReservada(sala.id_sala) ? "#B0B0B0" : "#e14e4e",
+                          },
+                          color: "#fff",
+                          fontWeight: "bold",
+                          borderRadius: 2,
+                          mr: 1,
+                        }}
+                      >
+                        {isSalaReservada(sala.id_sala) ? "Reservada" : "Reservar"}
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        onClick={() => navigate(`/DisponibilidadeSala/${sala.id_sala}`)}
+                        sx={{
+                          color: "#FF5757",
+                          borderColor: "#FF5757",
+                          "&:hover": { borderColor: "#e14e4e" },
+                          fontWeight: "bold",
+                          borderRadius: 2,
+                        }}
+                      >
+                        Ver Disponibilidade
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+
+        {selectedSala && (
+          <ReservaModal
+            open={openModal}
+            onClose={handleCloseModal}
+            onReserva={handleReserva}
+            loading={loading}
+          />
+        )}
+      </Container>
+    </>
   );
 }
 
@@ -205,6 +224,8 @@ function getStyles() {
       justifyContent: "center",
       flexDirection: "column",
       backgroundColor: "#ffdcdc",
+      position: "relative",
+      minHeight: "100vh",
     },
     tableContainer: { backgroundColor: "transparent" },
     table: {

@@ -3,21 +3,23 @@ import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import LogoutIcon from '@mui/icons-material/Logout';
 
-const Header = () => {
+const Header = ({ logout = true }) => { // <--- AQUI: recebe a prop logout
   return (
     <header style={headerStyle}>
       <div style={logoStyle}>
-        <Button 
-          component={Link} 
-          to="/" 
-          startIcon={<LogoutIcon sx={{ fontSize: 40 }} />} // Ajusta o tamanho do ícone
-          sx={buttonStyle}>
-          Logout
-        </Button>
+        {logout && ( // <--- AQUI: mostra o botão só se logout for true
+          <Button 
+            component={Link} 
+            to="/" 
+            startIcon={<LogoutIcon sx={{ fontSize: 40 }} />}
+            sx={buttonStyle}>
+            Logout
+          </Button>
+        )}
       </div>
     </header>
   );
-};
+}; 
 
 const headerStyle = {
   backgroundColor: "#D90000",

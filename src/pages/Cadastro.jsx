@@ -40,7 +40,7 @@ function Cadastro () {
     <div style={{ backgroundColor: "#FFDCDC"}} >
       
 
-      <Header />
+      <Header logout={false} />
 
       <Container component="main" sx={styles.container}>
         <Box

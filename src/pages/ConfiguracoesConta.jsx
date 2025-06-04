@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react"; // Importe useEffect
-import { useNavigate } from "react-router-dom"; // Importe useNavigate para redirecionamento
-import api from "../axios/axios"; // Assumindo que você tem um arquivo api.js configurado para suas chamadas de API
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../axios/axios";
 
 import {
   Box,
@@ -11,58 +11,46 @@ import {
   TextField,
   Button,
   Modal,
-  CircularProgress, // Adicionado para indicar carregamento
+  CircularProgress,
 } from "@mui/material";
 
 function ConfiguracoesConta() {
   const [modalAberto, setModalAberto] = useState(false);
-  const [nome, setNome] = useState(""); // Estado para o nome
-  const [email, setEmail] = useState(""); // Estado para o email
-  const [senha, setSenha] = useState(""); // Estado para a senha (se permitir edição)
-  const [loading, setLoading] = useState(true); // Estado para indicar carregamento
-  const [error, setError] = useState(null); // Estado para lidar com erros
-  const navigate = useNavigate(); // Hook para navegação
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  // Função para buscar os dados do usuário da API
-  const fetchUserData = async () => {
+  // Busca os dados do usuário no localStorage para preencher os campos
+  const fetchUserData = () => {
     setLoading(true);
-    setError(null);
     try {
       const userId = localStorage.getItem("id_usuario");
-      if (!userId) {
-        navigate("/"); // Redireciona se não houver ID de usuário logado
+      const nomeSalvo = localStorage.getItem("nome");
+      const emailSalvo = localStorage.getItem("email");
+
+      if (!userId || !nomeSalvo || !emailSalvo) {
+        navigate("/"); // redireciona para login se faltar dados
         return;
       }
-        // Exemplo: Supondo que sua API tenha um endpoint para buscar dados do usuário por ID
-        // const response = await api.get(`/users/${userId}`); // Ajuste o endpoint conforme sua API
-        // Dados de exemplo, substitua pela chamada real à API
-        const response = {
-          data: {
-            nome: "",
-            email: "",
-          }
-        };
 
-      setNome(response.data.nome);
-      setEmail(response.data.email);
-      // Não preencha a senha aqui por segurança, o usuário deve digitá-la para alterar
+      setNome(nomeSalvo);
+      setEmail(emailSalvo);
+      setError(null);
     } catch (err) {
-      console.error("Erro ao carregar dados do usuário:", err);
-      setError("Não foi possível carregar as informações do usuário.");
+      console.error("Erro ao carregar dados:", err);
+      setError("Erro ao carregar dados do usuário.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Função para lidar com a atualização dos dados do usuário
+  // Função para atualizar os dados do usuário via API
   const handleUpdateUser = async () => {
-    // Validação básica
-    if (!nome || !email) {
-      alert("Nome e Email são obrigatórios.");
-      return;
-    }
-
     try {
+      setLoading(true);
       const userId = localStorage.getItem("id_usuario");
       if (!userId) {
         alert("Usuário não autenticado.");
@@ -70,39 +58,41 @@ function ConfiguracoesConta() {
       }
 
       const userDataToUpdate = { nome, email };
-      if (senha) { // Apenas inclua a senha se ela foi digitada para atualização
+      if (senha) {
         userDataToUpdate.senha = senha;
       }
 
-      // Exemplo: Supondo que sua API tenha um endpoint para atualizar dados do usuário
-      // await api.put(`/users/${userId}`, userDataToUpdate); // Ajuste o endpoint e o método (PUT/PATCH)
-      // Simulação de chamada de API
-      console.log("Dados a serem enviados para atualização:", userDataToUpdate);
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simula delay da API
+      // Exemplo: supondo que sua API tenha esse método
+      await api.updateUsuario(userId, userDataToUpdate);
 
-      alert("Informações atualizadas com sucesso!");
+      // Atualiza localStorage com os novos dados
+      localStorage.setItem("nome", nome);
+      localStorage.setItem("email", email);
+
+      alert("Dados atualizados com sucesso!");
+      setSenha(""); // limpa campo senha
+      setError(null);
     } catch (err) {
-      console.error("Erro ao atualizar informações:", err);
-      alert("Não foi possível atualizar as informações. Tente novamente.");
+      console.error("Erro ao atualizar usuário:", err);
+      setError("Não foi possível atualizar os dados.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Efeito para carregar os dados do usuário quando o componente for montado
   useEffect(() => {
     const isAuth = localStorage.getItem("authenticated");
     if (!isAuth) {
-      navigate("/"); // Redireciona para a página inicial/login se não estiver autenticado
+      navigate("/");
     } else {
       fetchUserData();
     }
-  }, [navigate]); // Adicionado navigate como dependência
+  }, [navigate]);
 
   const handleLogout = () => {
-    // Limpa os dados de autenticação e redireciona
-    localStorage.clear(); // Limpa todos os itens do localStorage
-    console.log("Usuário desconectado");
+    localStorage.clear();
     setModalAberto(false);
-    navigate("/"); // Redireciona para a página de login/inicial
+    navigate("/");
   };
 
   return (
@@ -114,19 +104,21 @@ function ConfiguracoesConta() {
             Tela Configurações
           </Typography>
           <List>
-            {["Listagem de salas", "Minhas reservas", "Configurações"].map((item, index) => (
-              <ListItem
-                button
-                key={index}
-                onClick={() => {
-                  if (item === "Salas") navigate("/salas");
-                  if (item === "Reservas") navigate("/minhas-reservas");
-                  // Se for "Configurações", já estamos aqui, ou pode navegar para uma sub-rota
-                }}
-              >
-                <ListItemText primary={item} />
-              </ListItem>
-            ))}
+            {["Listagem de salas", "Minhas reservas", "Configurações"].map(
+              (item, index) => (
+                <ListItem
+                  button
+                  key={index}
+                  onClick={() => {
+                    if (item === "Listagem de salas") navigate("/ListagemSalas");
+                    if (item === "Minhas reservas") navigate("/reservas");
+                    if (item === "Configurações") navigate("/configuracoes");
+                  }}
+                >
+                  <ListItemText primary={item} />
+                </ListItem>
+              )
+            )}
             <ListItem
               button
               sx={{ backgroundColor: "#ffcccc", borderRadius: 1 }}
@@ -150,7 +142,12 @@ function ConfiguracoesConta() {
           </Typography>
 
           {loading ? (
-            <Box display="flex" justifyContent="center" alignItems="center" height="50%">
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              height="50%"
+            >
               <CircularProgress color="error" />
               <Typography ml={2}>Carregando informações...</Typography>
             </Box>
@@ -163,7 +160,7 @@ function ConfiguracoesConta() {
                 <TextField
                   fullWidth
                   value={nome}
-                  onChange={(e) => setNome(e.target.value)} // Adicionado onChange
+                  onChange={(e) => setNome(e.target.value)}
                   variant="filled"
                   InputProps={{ style: { backgroundColor: "#fd7c7c" } }}
                 />
@@ -174,7 +171,7 @@ function ConfiguracoesConta() {
                 <TextField
                   fullWidth
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)} // Adicionado onChange
+                  onChange={(e) => setEmail(e.target.value)}
                   variant="filled"
                   InputProps={{ style: { backgroundColor: "#fd7c7c" } }}
                 />
@@ -185,9 +182,9 @@ function ConfiguracoesConta() {
                 <TextField
                   fullWidth
                   type="password"
-                  value={senha} // Removido "Senha Do Usuário" fixo
-                  onChange={(e) => setSenha(e.target.value)} // Adicionado onChange
-                  placeholder="Deixe em branco para manter a senha atual" // Dica para o usuário
+                  value={senha}
+                  onChange={(e) => setSenha(e.target.value)}
+                  placeholder="Deixe em branco para manter a senha atual"
                   variant="filled"
                   InputProps={{ style: { backgroundColor: "#fd7c7c" } }}
                 />
@@ -195,12 +192,12 @@ function ConfiguracoesConta() {
 
               <Button
                 variant="contained"
-                onClick={handleUpdateUser} // Botão para salvar as alterações
+                onClick={handleUpdateUser}
                 sx={{
-                  backgroundColor: "#A80805", // Vermelho do seu tema
+                  backgroundColor: "#A80805",
                   color: "white",
                   "&:hover": { backgroundColor: "#c62828" },
-                  mr: 2, // Margem à direita
+                  mr: 2,
                 }}
               >
                 Salvar Alterações
@@ -222,7 +219,7 @@ function ConfiguracoesConta() {
         </Box>
       </Box>
 
-      {/* Modal de confirmação (mantido como está) */}
+      {/* Modal de confirmação */}
       <Modal open={modalAberto} onClose={() => setModalAberto(false)}>
         <Box
           bgcolor="#fd7c7c"

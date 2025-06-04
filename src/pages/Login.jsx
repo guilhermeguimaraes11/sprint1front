@@ -13,37 +13,40 @@ function Login() {
 
   const onChange = (event) => {
     const { name, value } = event.target;
-    setUsuario({ ...usuario, [name]: value });
+    setUsuario((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      const response = await api.postLogin(usuario);
-      alert(response.data.message);
-      localStorage.setItem("token", response.data.token)
-      localStorage.setItem("authenticated", true);
-     
-      localStorage.setItem("id_usuario", response.data.user.id_usuario);
-      navigate("/ListagemSalas", { state: { user: response.data.user } });
-    } catch (error) {
-      console.log(error);
-      alert(error.response?.data?.error || "Erro ao fazer login");
-    }
-  };
+  event.preventDefault();
+  try {
+    const response = await api.postLogin(usuario);
+    const user = response.data.user;
+
+    // ✅ Armazena tudo necessário no localStorage
+    localStorage.setItem("token", response.data.token);
+    localStorage.setItem("authenticated", "true");
+    localStorage.setItem("id_usuario", user.id_usuario);
+    localStorage.setItem("nome", user.nome);     // <-- adicione isso
+    localStorage.setItem("email", user.email);   // <-- e isso também
+
+    alert("Login realizado com sucesso!");
+
+    // Redireciona
+    navigate("/ListagemSalas", { state: { user } });
+  } catch (error) {
+    console.error("Erro no login:", error);
+    alert(error.response?.data?.error || "Erro ao fazer login. Verifique suas credenciais.");
+  }
+};
 
   return (
     <div style={{ backgroundColor: "#FFDCDC" }}>
       <Header logout={false} />
 
       <Container component="main" sx={styles.container}>
-        <Box
-          component="form"
-          sx={styles.form}
-          onSubmit={handleSubmit}
-          noValidate
-        >
+        <Box component="form" sx={styles.form} onSubmit={handleSubmit} noValidate>
           <Box component="img" src={logo} alt="Logo" sx={styles.logo} />
+
           <TextField
             required
             fullWidth
@@ -55,6 +58,7 @@ function Login() {
             onChange={onChange}
             sx={styles.textField}
           />
+
           <TextField
             required
             fullWidth
@@ -67,15 +71,12 @@ function Login() {
             onChange={onChange}
             sx={styles.textField}
           />
+
           <Button type="submit" variant="contained" sx={styles.buttonLogin}>
             Entrar
           </Button>
-          <Button
-            component={Link}
-            to="/cadastro"
-            variant="text"
-            sx={styles.buttonCadastro}
-          >
+
+          <Button component={Link} to="/cadastro" variant="text" sx={styles.buttonCadastro}>
             Cadastre-se
           </Button>
         </Box>
@@ -95,7 +96,6 @@ function getStyles() {
       alignItems: "center",
       height: "78.3vh",
     },
-    buttonHome: { mr: 2 },
     form: {
       mt: 3,
       display: "flex",
