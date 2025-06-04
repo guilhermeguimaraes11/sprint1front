@@ -1,5 +1,8 @@
+// src/pages/ConfiguracoesConta.jsx
+
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Header from "../components/Header"; // importe o Header
 
 import {
   Box,
@@ -29,7 +32,7 @@ function ConfiguracoesConta() {
       const emailSalvo = localStorage.getItem("email");
 
       if (!userId || !nomeSalvo || !emailSalvo) {
-        navigate("/");
+        navigate("/"); // redireciona para login caso falte algum dado
         return;
       }
 
@@ -61,6 +64,9 @@ function ConfiguracoesConta() {
 
   return (
     <>
+      {/* Header com logout desabilitado */}
+      <Header logout={false} />
+
       <Box display="flex" height="100vh" bgcolor="#fff">
         {/* Menu lateral */}
         <Box width="250px" bgcolor="#f9f9f9" borderRight="1px solid #ddd" p={2}>
@@ -78,6 +84,7 @@ function ConfiguracoesConta() {
                     if (item === "Minhas reservas") navigate("/reservas");
                     if (item === "Configurações") navigate("/configuracoes");
                   }}
+                  sx={{ cursor: "pointer" }}
                 >
                   <ListItemText primary={item} />
                 </ListItem>
@@ -85,7 +92,7 @@ function ConfiguracoesConta() {
             )}
             <ListItem
               button
-              sx={{ backgroundColor: "#ffcccc", borderRadius: 1 }}
+              sx={{  borderRadius: 1 }}
               onClick={() => setModalAberto(true)}
             >
               <ListItemText
@@ -101,7 +108,7 @@ function ConfiguracoesConta() {
 
         {/* Conteúdo principal */}
         <Box flexGrow={1} bgcolor="#ffd6d6" p={5}>
-          <Typography variant="h4" color="#a80805" fontWeight="bold" mb={4}>
+          <Typography variant="h4" color="black" fontWeight="bold" mb={4}>
             Informações do usuário
           </Typography>
 

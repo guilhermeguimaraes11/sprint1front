@@ -1,7 +1,10 @@
+// src/pages/ListagemSalas.jsx
+
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../axios/axios";
 import Header from "../components/Header";
+import ModalCriarReserva from "../components/ModalCriarReserva"; // << importa aqui
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Table from "@mui/material/Table";
@@ -14,13 +17,13 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import SettingsIcon from "@mui/icons-material/Settings";
-import ReservaModal from "../components/ReservaModal";
+
 
 function ListagemSalas() {
   const styles = getStyles();
   const [salas, setSalas] = useState([]);
   const [reservas, setReservas] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
+  const [openCriar, setOpenCriar] = useState(false);
   const [selectedSala, setSelectedSala] = useState(null);
   const [loading, setLoading] = useState(false);
   const [filtro, setFiltro] = useState("");
@@ -46,7 +49,6 @@ function ListagemSalas() {
     }
   };
 
-  // Verifica auth e popula lista
   useEffect(() => {
     if (!localStorage.getItem("authenticated")) {
       navigate("/");
@@ -56,46 +58,43 @@ function ListagemSalas() {
     }
   }, [navigate]);
 
-  const handleOpenModal = (sala) => {
+  const handleOpenCriar = (sala) => {
     setSelectedSala(sala);
-    setOpenModal(true);
+    setOpenCriar(true);
   };
-  const handleCloseModal = () => {
+  const handleCloseCriar = () => {
     setSelectedSala(null);
-    setOpenModal(false);
+    setOpenCriar(false);
   };
 
-  const handleReserva = async (formData) => {
+  const handleReserva = async ({ data, horarioInicio, horarioFim }) => {
     if (!selectedSala) return;
     setLoading(true);
 
     try {
       const id_usuario = localStorage.getItem("id_usuario");
-      const data =
-        typeof formData.data === "string"
-          ? formData.data
-          : formData.data.toISOString().split("T")[0];
-
       await api.postReserva({
         data,
-        horario_inicio: formData.horarioInicio,
-        horario_fim: formData.horarioFim,
+        horario_inicio: horarioInicio,
+        horario_fim: horarioFim,
         fk_id_sala: selectedSala.id_sala,
         fk_id_usuario: id_usuario,
       });
 
+      // Recarrega lista de reservas
       await getReservas();
-      handleCloseModal();
+      handleCloseCriar();
       alert("Reserva realizada com sucesso!");
     } catch (err) {
       console.error("Erro ao reservar sala:", err);
-      alert(err.response.data.error || "Erro ao reservar");
+      alert(err.response?.data?.error || "Erro ao reservar");
     } finally {
       setLoading(false);
     }
   };
 
-  const isSalaReservada = (id) => reservas.some((r) => r.fk_id_sala === id);
+  const isSalaReservada = (id) =>
+    reservas.some((r) => r.fk_id_sala === id);
 
   const salasFiltradas = salas.filter((s) => {
     const termo = filtro.toLowerCase();
@@ -112,7 +111,15 @@ function ListagemSalas() {
       <Header logout={true} />
       <Container sx={styles.container}>
         {/* Botão engrenagem no canto superior direito */}
-        <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", pt: 2, pr: 2 }}>
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "flex-end",
+            pt: 2,
+            pr: 2,
+          }}
+        >
           <IconButton
             color="gray"
             aria-label="configurações"
@@ -137,7 +144,14 @@ function ListagemSalas() {
             <Table size="small" sx={styles.table}>
               <TableHead sx={styles.tableHead}>
                 <TableRow sx={styles.tableRow}>
-                  {["Nome", "Descrição", "Bloco", "Tipo", "Capacidade", "Ações"].map((h) => (
+                  {[
+                    "Nome",
+                    "Descrição",
+                    "Bloco",
+                    "Tipo",
+                    "Capacidade",
+                    "Ações",
+                  ].map((h) => (
                     <TableCell key={h} align="center" sx={styles.tableCell}>
                       {h}
                     </TableCell>
@@ -167,11 +181,15 @@ function ListagemSalas() {
                       <Button
                         variant="contained"
                         disabled={isSalaReservada(sala.id_sala)}
-                        onClick={() => handleOpenModal(sala)}
+                        onClick={() => handleOpenCriar(sala)}
                         sx={{
-                          backgroundColor: isSalaReservada(sala.id_sala) ? "#B0B0B0" : "#FF5757",
+                          backgroundColor: isSalaReservada(sala.id_sala)
+                            ? "#B0B0B0"
+                            : "#FF5757",
                           "&:hover": {
-                            backgroundColor: isSalaReservada(sala.id_sala) ? "#B0B0B0" : "#e14e4e",
+                            backgroundColor: isSalaReservada(sala.id_sala)
+                              ? "#B0B0B0"
+                              : "#e14e4e",
                           },
                           color: "#fff",
                           fontWeight: "bold",
@@ -179,11 +197,15 @@ function ListagemSalas() {
                           mr: 1,
                         }}
                       >
-                        {isSalaReservada(sala.id_sala) ? "Reservada" : "Reservar"}
+                        {isSalaReservada(sala.id_sala)
+                          ? "Reservada"
+                          : "Reservar"}
                       </Button>
                       <Button
                         variant="outlined"
-                        onClick={() => navigate(`/DisponibilidadeSala/${sala.id_sala}`)}
+                        onClick={() =>
+                          navigate(`/DisponibilidadeSala/${sala.id_sala}`)
+                        }
                         sx={{
                           color: "#FF5757",
                           borderColor: "#FF5757",
@@ -203,10 +225,10 @@ function ListagemSalas() {
         </Box>
 
         {selectedSala && (
-          <ReservaModal
-            open={openModal}
-            onClose={handleCloseModal}
-            onReserva={handleReserva}
+          <ModalCriarReserva
+            open={openCriar}
+            onClose={handleCloseCriar}
+            onConfirm={handleReserva}
             loading={loading}
           />
         )}

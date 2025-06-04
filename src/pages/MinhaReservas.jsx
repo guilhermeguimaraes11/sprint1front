@@ -15,21 +15,18 @@ import {
 } from "@mui/material";
 
 import Header from "../components/Header";
-import ConfirmDialog from "../components/ConfirmDialog";
+import ModalDeletarReserva from "../components/ModalDeletarReserva";
 
 function MinhasReservas() {
   const [reservas, setReservas] = useState([]);
-  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const [reservaParaCancelar, setReservaParaCancelar] = useState(null);
   const navigate = useNavigate();
 
-  // Busca todas as reservas do usuário
   const fetchReservas = async () => {
     try {
       const userId = localStorage.getItem("id_usuario");
       const response = await api.getAllreserva_salas();
-      // Ajuste para refletir a estrutura de dados que sua API retorna:
-      // no seu exemplo mais recente, era response.data.reserva_sala
       const todas = response.data.reserva_sala || response.data;
       const minhas = todas.filter(
         (r) => String(r.fk_id_usuario) === String(userId)
@@ -41,30 +38,26 @@ function MinhasReservas() {
     }
   };
 
-  // Abre o confirmDialog, armazenando a reserva que será cancelada
-  const handleOpenConfirm = (reservaId) => {
+  const handleOpenModal = (reservaId) => {
     setReservaParaCancelar(reservaId);
-    setConfirmOpen(true);
+    setModalOpen(true);
   };
 
-  // Fecha o confirmDialog sem fazer nada
-  const handleCancelConfirm = () => {
-    setConfirmOpen(false);
+  const handleCancelModal = () => {
+    setModalOpen(false);
     setReservaParaCancelar(null);
   };
 
-  // Se o usuário confirmar, efetua o delete
   const handleConfirmDelete = async () => {
     if (!reservaParaCancelar) return;
     try {
       await api.deleteReserva(reservaParaCancelar);
-      // Após o delete, recarrega as reservas
-      fetchReservas();
+      await fetchReservas();
     } catch (error) {
-      console.error("Erro ao cancelar reserva", error);
+      console.error("Erro ao cancelar reserva:", error);
       alert("Não foi possível cancelar a reserva");
     } finally {
-      setConfirmOpen(false);
+      setModalOpen(false);
       setReservaParaCancelar(null);
     }
   };
@@ -110,11 +103,10 @@ function MinhasReservas() {
                 </ListItem>
               )
             )}
-
             <ListItem
               button
-              sx={{ backgroundColor: "#ffcccc", borderRadius: 1 }}
-              onClick={() => setConfirmOpen(true)} // reutilize o mesmo "confirm" para Logout
+              sx={{borderRadius: 1 }}
+              onClick={handleLogout}
             >
               <ListItemText
                 primary="Finalizar sessão"
@@ -170,7 +162,7 @@ function MinhasReservas() {
 
                 <Button
                   variant="contained"
-                  onClick={() => handleOpenConfirm(reserva.id_reserva)}
+                  onClick={() => handleOpenModal(reserva.id_reserva)}
                   sx={{
                     backgroundColor: "#A80805",
                     color: "white",
@@ -185,22 +177,11 @@ function MinhasReservas() {
         </Box>
       </Box>
 
-      {/** Modal de confirmação para CANCELAR RESERVA **/}
-      <ConfirmDialog
-        open={confirmOpen && Boolean(reservaParaCancelar)}
-        title="Cancelar Reserva"
-        message="Deseja realmente cancelar esta reserva?"
+      {/* Modal para confirmar exclusão de reserva */}
+      <ModalDeletarReserva
+        open={modalOpen}
         onConfirm={handleConfirmDelete}
-        onCancel={handleCancelConfirm}
-      />
-
-      {/** Modal de confirmação para LOGOUT (reaproveitando o mesmo) **/}
-      <ConfirmDialog
-        open={confirmOpen && !reservaParaCancelar}
-        title="Finalizar Sessão"
-        message="Deseja realmente encerrar sua sessão?"
-        onConfirm={handleLogout}
-        onCancel={handleCancelConfirm}
+        onCancel={handleCancelModal}
       />
     </>
   );
