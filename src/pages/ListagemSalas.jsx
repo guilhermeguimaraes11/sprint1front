@@ -134,7 +134,7 @@ function ListagemSalas() {
           label="Buscar sala"
           variant="outlined"
           fullWidth
-          sx={{ mt: 2, mb: 2, width: "60%" }}
+          sx={{ mt: 3, mb: 15, width: "65%" }}
           value={filtro}
           onChange={(e) => setFiltro(e.target.value)}
         />
@@ -201,21 +201,7 @@ function ListagemSalas() {
                           ? "Reservada"
                           : "Reservar"}
                       </Button>
-                      <Button
-                        variant="outlined"
-                        onClick={() =>
-                          navigate(`/DisponibilidadeSala/${sala.id_sala}`)
-                        }
-                        sx={{
-                          color: "#FF5757",
-                          borderColor: "#FF5757",
-                          "&:hover": { borderColor: "#e14e4e" },
-                          fontWeight: "bold",
-                          borderRadius: 2,
-                        }}
-                      >
-                        Ver Disponibilidade
-                      </Button>
+                     
                     </TableCell>
                   </TableRow>
                 ))}

@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
 import ListagemSalas from "./pages/ListagemSalas";
-import DisponibilidadeSala from "./pages/DisponibilidadeSala";
 import Home from "./pages/Home";
 import ProtectedRouter from "./components/ProtectedRouter";
 import Reservas from "./pages/MinhaReservas";
@@ -26,14 +25,7 @@ function App() {
           }
         />
 
-        <Route
-          path="/DisponibilidadeSala/:fk_id_sala"
-          element={
-            <ProtectedRouter>
-              <DisponibilidadeSala />
-            </ProtectedRouter>
-          }
-        />
+        
 
         <Route
           path="/reservas"

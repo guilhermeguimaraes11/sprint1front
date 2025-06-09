@@ -35,7 +35,7 @@ function Login() {
     } catch (error) {
       console.error("Erro no login:", error);
       alert(
-        error.response?.data?.error ||
+        error.response.data.error ||
           "Erro ao fazer login. Verifique suas credenciais."
       );
     }

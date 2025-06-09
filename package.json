@@ -16,7 +16,9 @@
     "@mui/material": "^6.4.8",
     "axios": "^1.8.4",
     "react": "^18.3.1",
+    "react-datepicker": "^8.4.0",
     "react-dom": "^18.3.1",
+    "react-modal": "^3.16.3",
     "react-native-vector-icons": "^10.2.0",
     "react-router-dom": "^7.2.0",
     "styled-components": "^6.1.16"
