@@ -260,7 +260,7 @@ function ConfiguracoesConta() {
 
       <ModalAtualizarUser
         open={modalAtualizarAberto}
-        onConfirm={handleAtualizarUsuario} // só chama a função, não fecha modal aqui
+        onConfirm={handleAtualizarUsuario} 
         onCancel={() => setModalAtualizarAberto(false)}
       />
 
