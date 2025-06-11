@@ -1,9 +1,9 @@
-// src/pages/ConfiguracoesConta.jsx
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import FinalizarSecao from "../components/FinalizarSecao";
+import ModalAtualizarUser from "../components/ModalAtualizarUser"; // Modal atualizar
+import ModalDeletarUser from "../components/ModalDeletarUser"; // Modal deletar
 import api from "../axios/axios";
 
 import {
@@ -19,8 +19,11 @@ import {
 
 function ConfiguracoesConta() {
   const [modalAberto, setModalAberto] = useState(false);
+  const [modalAtualizarAberto, setModalAtualizarAberto] = useState(false);
+  const [modalDeletarAberto, setModalDeletarAberto] = useState(false);
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
+  const [cpf, setCpf] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -31,14 +34,16 @@ function ConfiguracoesConta() {
       const userId = localStorage.getItem("id_usuario");
       const nomeSalvo = localStorage.getItem("nome");
       const emailSalvo = localStorage.getItem("email");
+      const cpfSalvo = localStorage.getItem("cpf");
 
-      if (!userId || !nomeSalvo || !emailSalvo) {
+      if (!userId || !nomeSalvo || !emailSalvo || !cpfSalvo) {
         navigate("/");
         return;
       }
 
       setNome(nomeSalvo);
       setEmail(emailSalvo);
+      setCpf(cpfSalvo);
       setError(null);
     } catch (err) {
       console.error("Erro ao carregar dados:", err);
@@ -73,19 +78,26 @@ function ConfiguracoesConta() {
 
     try {
       setLoading(true);
-     await api.updateUser(id_usuario, {
-  nomecompleto: nome,
-  email: email,
-});
+      await api.updateUser(id_usuario, {
+        cpf,
+        nomecompleto: nome,
+        email,
+      });
 
       localStorage.setItem("nome", nome);
       localStorage.setItem("email", email);
+      localStorage.setItem("cpf", cpf);
 
       setError(null);
       alert("Dados atualizados com sucesso!");
+      setModalAtualizarAberto(false); // fecha modal só aqui, após sucesso
     } catch (err) {
       console.error("Erro ao atualizar usuário:", err);
-      setError("Erro ao atualizar dados.");
+      if (err.response && err.response.data && err.response.data.error) {
+        setError(err.response.data.error);
+      } else {
+        setError("Erro ao atualizar dados.");
+      }
     } finally {
       setLoading(false);
     }
@@ -99,11 +111,6 @@ function ConfiguracoesConta() {
       return;
     }
 
-    const confirmar = window.confirm(
-      "Tem certeza que deseja excluir sua conta? Essa ação não pode ser desfeita."
-    );
-    if (!confirmar) return;
-
     try {
       setLoading(true);
       await api.deleteUser(id_usuario);
@@ -112,9 +119,14 @@ function ConfiguracoesConta() {
       navigate("/");
     } catch (err) {
       console.error("Erro ao excluir conta:", err);
-      setError("Erro ao excluir a conta.");
+      if (err.response && err.response.data && err.response.data.error) {
+        setError(err.response.data.error);
+      } else {
+        setError("Erro ao excluir a conta.");
+      }
     } finally {
       setLoading(false);
+      setModalDeletarAberto(false);
     }
   };
 
@@ -161,7 +173,6 @@ function ConfiguracoesConta() {
           </List>
         </Box>
 
-        {/* Conteúdo principal */}
         <Box flexGrow={1} bgcolor="#ffd6d6" p={5}>
           <Typography variant="h4" color="black" fontWeight="bold" mb={4}>
             Informações do usuário
@@ -181,6 +192,21 @@ function ConfiguracoesConta() {
             <Typography color="error">{error}</Typography>
           ) : (
             <>
+              <Box mb={3}>
+                <Typography variant="subtitle1" fontWeight="bold">
+                  CPF:
+                </Typography>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  disabled
+                  value={cpf}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                />
+              </Box>
+
               <Box mb={3}>
                 <Typography variant="subtitle1" fontWeight="bold">
                   Nome:
@@ -205,24 +231,43 @@ function ConfiguracoesConta() {
                 />
               </Box>
 
-             <Box display="flex" flexDirection="column" gap={2}>
-  <Button variant="contained" color="error" onClick={handleAtualizarUsuario}>
-    Atualizar dados
-  </Button>
-  <Button variant="outlined" color="error" onClick={handleExcluirConta}>
-    Excluir minha conta
-  </Button>
-</Box>
+              <Box display="flex" flexDirection="column" gap={2}>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={() => setModalAtualizarAberto(true)}
+                >
+                  Atualizar dados
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  onClick={() => setModalDeletarAberto(true)} // abrir modal deletar
+                >
+                  Excluir minha conta
+                </Button>
+              </Box>
             </>
           )}
         </Box>
       </Box>
 
-      {/* Modal de confirmação de logout */}
       <FinalizarSecao
         open={modalAberto}
         onConfirm={handleLogout}
         onCancel={() => setModalAberto(false)}
+      />
+
+      <ModalAtualizarUser
+        open={modalAtualizarAberto}
+        onConfirm={handleAtualizarUsuario} // só chama a função, não fecha modal aqui
+        onCancel={() => setModalAtualizarAberto(false)}
+      />
+
+      <ModalDeletarUser
+        open={modalDeletarAberto}
+        onConfirm={handleExcluirConta}
+        onCancel={() => setModalDeletarAberto(false)}
       />
     </>
   );

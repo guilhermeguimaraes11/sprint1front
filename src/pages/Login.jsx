@@ -27,6 +27,7 @@ function Login() {
       localStorage.setItem("authenticated", "true");
       localStorage.setItem("nome", response.data.user.nomecompleto);
       localStorage.setItem("email", response.data.user.email);
+      localStorage.setItem("cpf", response.data.user.cpf);
 
       alert("Login realizado com sucesso!");
 

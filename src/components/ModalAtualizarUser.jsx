@@ -6,7 +6,7 @@ import {
   Modal,
 } from "@mui/material";
 
-const ModalDeletarUser = ({ open, onConfirm, onCancel }) => {
+const ModalAtualizarUser = ({ open, onConfirm, onCancel }) => {
   return (
     <Modal open={open} onClose={onCancel}>
       <Box
@@ -21,10 +21,10 @@ const ModalDeletarUser = ({ open, onConfirm, onCancel }) => {
         textAlign="center"
       >
         <Typography variant="h5" fontWeight="bold" mb={1}>
-          Excluir Conta
+          Confirmar Atualização
         </Typography>
         <Typography fontWeight="bold" mb={4}>
-          Tem certeza que deseja excluir sua conta? Essa ação não pode ser desfeita.
+          Deseja realmente atualizar seus dados? Essa ação substituirá suas informações anteriores.
         </Typography>
 
         <Box display="flex" justifyContent="space-evenly">
@@ -38,7 +38,7 @@ const ModalDeletarUser = ({ open, onConfirm, onCancel }) => {
               px: 4,
             }}
           >
-            Excluir
+            Confirmar
           </Button>
           <Button
             onClick={onCancel}
@@ -58,4 +58,4 @@ const ModalDeletarUser = ({ open, onConfirm, onCancel }) => {
   );
 };
 
-export default ModalDeletarUser;
+export default ModalAtualizarUser;
