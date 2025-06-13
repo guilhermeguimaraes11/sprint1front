@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://10.89.240.72:5000/reservas/v1/",
+  baseURL: "http://192.168.100.8:5000/reservas/v1/",
   headers: { accept: "application/json" },
 });
 
@@ -24,7 +24,7 @@ const sheets = {
   deleteReserva: (id) => api.delete(`reservaschedule/${id}`),
   getAllreserva_salas: () => api.get("reservaschedule"),
   getDisponibilidade: (data_inicio, data_fim) =>
-    api.get(`/salasdisponiveldata/${data_inicio}/${data_fim}`),
+    api.get(`salasdisponiveldata/${data_inicio}/${data_fim}`),
  updateUser: (id_usuario, dadosUsuario) => api.put(`user/${id_usuario}`, dadosUsuario),
   deleteUser: (id_usuario) => api.delete(`user/${id_usuario}`),
 };
