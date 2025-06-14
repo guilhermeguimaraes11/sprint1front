@@ -43,8 +43,15 @@ export default function ModalDisponibilidade({ open, onClose }) {
     setSalasDisponiveis([]);
 
     try {
-      const resposta = await api.getDisponibilidade(inicio, fim);
-      setSalasDisponiveis(resposta.data.salas || []);
+      const resposta = await api.getDisponibilidade(
+        encodeURIComponent(inicio),
+        encodeURIComponent(fim)
+      );
+      // Confirma que vem no formato esperado
+    setSalasDisponiveis(resposta.data.salasDisponiveisFinal || []);
+        if (resposta.data.salasDisponiveisFinal.length === 0) {
+            alert("Nenhuma sala disponível nesse período.");
+        }   
     } catch (erro) {
       console.error("Erro ao buscar disponibilidade:", erro);
       alert("Erro ao buscar disponibilidade.");

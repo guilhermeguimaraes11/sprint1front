@@ -1,5 +1,3 @@
-// src/components/ModalCriarReserva.jsx
-
 import React, { useState, useEffect } from "react";
 import {
   Box,
@@ -12,17 +10,16 @@ import {
   CircularProgress,
 } from "@mui/material";
 
-
 export default function ModalCriarReserva({
   open,
   onClose,
   onConfirm,
   loading = false,
+  errorMsg = "",
 }) {
   const [data, setData] = useState("");
   const [horarioInicio, setHorarioInicio] = useState("");
   const [horarioFim, setHorarioFim] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
 
   // Limpa os campos sempre que o modal abre
   useEffect(() => {
@@ -30,25 +27,12 @@ export default function ModalCriarReserva({
       setData("");
       setHorarioInicio("");
       setHorarioFim("");
-      setErrorMsg("");
+      // Não limpa errorMsg porque ele vem via prop do componente pai
     }
   }, [open]);
 
-  // Validações básicas antes de confirmar
   const handleSubmit = () => {
-    // 1) Todos os campos obrigatórios?
-    if (!data || !horarioInicio || !horarioFim) {
-      setErrorMsg("Preencha data, horário de início e horário de fim.");
-      return;
-    }
-
-    // 2) Horário de início antes do fim?
-    if (horarioInicio >= horarioFim) {
-      setErrorMsg("O horário de início deve ser anterior ao horário de fim.");
-      return;
-    }
-
-    // Se tudo ok, chama onConfirm com um objeto contendo data e horários
+    // Apenas chama onConfirm, pois a validação está na API
     onConfirm({ data, horarioInicio, horarioFim });
   };
 
@@ -72,7 +56,6 @@ export default function ModalCriarReserva({
         </Typography>
 
         <Stack spacing={2}>
-          {/* Campo Data */}
           <TextField
             label="Data"
             type="date"
@@ -81,7 +64,6 @@ export default function ModalCriarReserva({
             InputLabelProps={{ shrink: true }}
           />
 
-          {/* Campo Horário de Início */}
           <TextField
             label="Horário Início"
             type="time"
@@ -90,7 +72,6 @@ export default function ModalCriarReserva({
             InputLabelProps={{ shrink: true }}
           />
 
-          {/* Campo Horário de Fim */}
           <TextField
             label="Horário Fim"
             type="time"
@@ -100,7 +81,7 @@ export default function ModalCriarReserva({
           />
 
           {errorMsg && (
-            <Typography color="error" variant="body2">
+            <Typography color="error" variant="body2" sx={{ mt: 1 }}>
               {errorMsg}
             </Typography>
           )}
