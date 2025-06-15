@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../axios/axios"; // Importando api correto
+import api from "../axios/axios";
 import Header from "../components/Header";
 import ModalCriarReserva from "../components/ModalCriarReserva";
 import ModalDisponibilidade from "../components/ModalDisponibilidade";
@@ -27,14 +27,14 @@ function ListagemSalas() {
   const [filtro, setFiltro] = useState("");
   const navigate = useNavigate();
 
-  // Buscar salas
+
   const getSalas = async () => {
     try {
-      const { data } = await api.getSalas(); // supondo que api.getSalas existe e retorna { salas: [...] }
+      const { data } = await api.getSalas();
       setSalas(data.salas);
     } catch (err) {
       console.error("Erro ao buscar salas:", err);
-      alert("Erro ao buscar salas."); // Feedback para o usuário
+      alert("Erro ao buscar salas.");
     }
   };
 
@@ -44,29 +44,29 @@ function ListagemSalas() {
     } else {
       getSalas();
     }
-    // Removido getReservas daqui, pois a verificação de disponibilidade será feita na reserva
+
   }, [navigate]);
 
-  // Abrir modal para criar reserva
+
   const handleOpenCriar = (sala) => {
     setSelectedSala(sala);
     setOpenCriar(true);
   };
 
-  // Fechar modal
+
   const handleCloseCriar = () => {
     setSelectedSala(null);
     setOpenCriar(false);
   };
 
-  // Criar reserva
+
   const handleReserva = async ({ data, horarioInicio, horarioFim }) => {
     if (!selectedSala) return;
     setLoading(true);
 
     try {
       const id_usuario = localStorage.getItem("id_usuario");
-      // A validação de horário e conflitos será feita pelo backend
+
       await api.postReserva({
         data,
         horario_inicio: horarioInicio,
@@ -76,28 +76,17 @@ function ListagemSalas() {
       });
       alert("Reserva realizada com sucesso!");
       handleCloseCriar();
-      // Recarregar as salas se necessário, ou apenas atualizar o estado local
-      // dependendo de como as reservas afetam a visualização da sala.
-      // Se 'isSalaReservada' não é mais usado para desabilitar o botão,
-      // talvez não precise de getReservas aqui. Se o backend retornar
-      // informações atualizadas de disponibilidade, use-as.
+
     } catch (err) {
       console.error("Erro ao reservar sala:", err);
-      // Exibir a mensagem de erro do backend para o usuário
+
       alert(err.response?.data?.error || "Erro ao reservar sala. Tente novamente.");
     } finally {
       setLoading(false);
     }
   };
 
-  // A função isSalaReservada foi removida ou simplificada no frontend.
-  // A validação de disponibilidade em um período específico será feita no backend.
-  // O botão "Reservar" estará sempre ativo, e o usuário receberá feedback após a tentativa.
-  // Se você quiser desabilitar o botão após uma reserva BEM-SUCEDIDA para a mesma sala
-  // no período, você precisaria de uma forma mais robusta de gerenciar o estado das reservas locais,
-  // ou buscar as reservas novamente após o sucesso. Por enquanto, a validação fica no backend.
 
-  // Filtra salas por texto do filtro
   const salasFiltradas = salas.filter((s) => {
     const termo = filtro.toLowerCase();
     return (
@@ -134,8 +123,7 @@ function ListagemSalas() {
         <TextField
           label="Buscar sala"
           variant="outlined"
-          fullWidth
-          sx={{ mt: 3, width: "65%" }}
+          sx={{ mt: 2, width: "75%", }}
           value={filtro}
           onChange={(e) => setFiltro(e.target.value)}
         />
@@ -143,8 +131,8 @@ function ListagemSalas() {
         <Button
           variant="contained"
           sx={{
-            mt: 2,
-            backgroundColor: "#9c27b0",
+            mt: 3,
+            backgroundColor: "#FF5757",
             color: "white",
             fontWeight: "bold",
             borderRadius: 2,

@@ -33,9 +33,24 @@ export default function ModalDisponibilidade({ open, onClose }) {
   const [salasDisponiveis, setSalasDisponiveis] = useState([]);
   const [carregando, setCarregando] = useState(false);
 
+
   const handleVerificar = async () => {
     if (!inicio || !fim) {
       alert("Preencha as duas datas.");
+      return;
+    }
+
+    const dataInicio = new Date(inicio);
+    const dataFim = new Date(fim);
+    const agora = new Date();
+
+    if (dataInicio < agora) {
+      alert("A data de início não pode ser anterior ao momento atual.");
+      return;
+    }
+
+    if (dataFim < dataInicio) {
+      alert("A data de fim não pode ser anterior à data de início.");
       return;
     }
 
@@ -47,11 +62,10 @@ export default function ModalDisponibilidade({ open, onClose }) {
         encodeURIComponent(inicio),
         encodeURIComponent(fim)
       );
-      // Confirma que vem no formato esperado
-    setSalasDisponiveis(resposta.data.salasDisponiveisFinal || []);
-        if (resposta.data.salasDisponiveisFinal.length === 0) {
-            alert("Nenhuma sala disponível nesse período.");
-        }   
+      setSalasDisponiveis(resposta.data.salasDisponiveisFinal || []);
+      if (resposta.data.salasDisponiveisFinal.length === 0) {
+        alert("Nenhuma sala disponível nesse período.");
+      }
     } catch (erro) {
       console.error("Erro ao buscar disponibilidade:", erro);
       alert("Erro ao buscar disponibilidade.");
